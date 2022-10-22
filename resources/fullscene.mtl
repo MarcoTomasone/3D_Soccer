@@ -1,0 +1,132 @@
+# Blender 3.3.1 MTL File: 'None'
+# www.blender.org
+
+newmtl Material.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/fussballfeld_03_c.jpg
+
+newmtl el_grandstand_brabham_a_seat_material.001
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_c.png
+
+newmtl el_grandstand_brabham_a_seat_material.002
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_c.png
+
+newmtl el_grandstand_brabham_a_seat_material.003
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_c.png
+
+newmtl el_grandstand_brabham_a_seat_material.004
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_c.png
+
+newmtl mel_grandstand_brabham_a!0_material.001
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_a.png
+
+newmtl mel_grandstand_brabham_a!0_material.002
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_a.png
+
+newmtl mel_grandstand_brabham_a!0_material.003
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_a.png
+
+newmtl mel_grandstand_brabham_a!0_material.004
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_a.png
+
+newmtl mel_grandstand_railing!0_material.002
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+map_d C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+
+newmtl mel_grandstand_railing!0_material.003
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+map_d C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+
+newmtl mel_grandstand_railing!0_material.004
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+map_d C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+
+newmtl mel_grandstand_railing!0_material.005
+Ns 96.078453
+Ka 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+illum 1
+map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
+map_d C:/Users/tomas/Desktop/CG/3D_Soccer/obj/stand/generic medium_01_b.png
