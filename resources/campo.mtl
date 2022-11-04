@@ -9,4 +9,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:/Users/tomas/Desktop/CG/3D_Soccer/obj/fussballfeld_03_c.jpg
+map_Kd ./fussballfeld_03_c.jpg
