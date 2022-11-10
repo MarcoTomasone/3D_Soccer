@@ -13,7 +13,22 @@
 		<h2>Soccer 3D</h2>
 		<canvas id="screenCanvas" width="1280" height="720"></canvas>
 	</div>
+  
+	Debug Mode: <input id="debugToggle" type="checkbox" />
 </body>
+
+<script>
+	var debug = false;
+	
+	document.getElementById('debugToggle').addEventListener('change', (event) => {
+		if (event.currentTarget.checked) {
+			debug = true;
+		} else {
+			debug = false;
+		}
+	})
+</script>
+
 <script src="./lib/profLibs/m4.js"></script>
 <script src="./lib/profLibs/webgl-utils.js"></script>
 <script type="module" src="./3D_Soccer.js"></script>
