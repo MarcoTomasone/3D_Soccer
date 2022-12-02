@@ -9,7 +9,7 @@ export class Camera {
 		this.radius = 50;
 		this.aspect = canvas.clientWidth / canvas.clientHeight;
 		this.defaultAngle = {
-			xy: degToRad(10),
+			xy: degToRad(190),
 			xz: degToRad(30)
 		},
 		this.movement = {

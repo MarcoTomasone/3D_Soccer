@@ -3,17 +3,26 @@
 
 <head>
   <meta charset="utf-8">
-  <!--<link rel="stylesheet" href="myStyle.css">-->
+  <link rel="stylesheet" href="lib/myStyle.css">
   </link>
   <title>3D SOCCER</title>
 </head>
 
 <body>
-	<div>
-		<h2>Soccer 3D</h2>
+	<h2>Soccer 3D</h2>
+	<div class="container">
 		<canvas id="screenCanvas" width="1280" height="720"></canvas>
 	</div>
-  
+	<div class="child" id="uiContainer">
+		<form>
+			<p>Comandi</p>
+			<div>
+				<input type="range" id="zoomCamera" name="zoomCamera" min="1" max="100" value="4">
+				<label for="zoomCameraLabel">Zoom Camera</label>
+			  </div>
+		</form>
+	</div>
+	
 	Debug Mode: <input id="debugToggle" type="checkbox" />
 </body>
 

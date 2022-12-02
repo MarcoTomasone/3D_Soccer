@@ -1,4 +1,5 @@
 
+import { Ball } from "../Ball.js";
 import { Camera } from "./Camera.js";
 
 export class Environment {
@@ -86,25 +87,30 @@ export class Environment {
 	`;
 
 	constructor(canvasName) {
+		//Get canvas
 		const canvas = document.querySelector(canvasName);
 		if (!canvas) {
 			console.error("Unable to find canvas " + canvasName);
 			return;
 		}
 
+		//Create a WebGL2RenderingContext
 		this.gl = canvas.getContext("webgl2");
 		if (!this.gl) {
 			console.error("Unable to initialize WebGL2 on canvas " + canvasName);
 			return;
 		}
 
-		// compiles and links the shaders, looks up attribute and uniform locations
+		//Compiles and links the shaders, looks up attribute and uniform locations
 		this.programInfo = webglUtils.createProgramInfo(this.gl, [Environment.vs, Environment.fs]);
 
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
+		this.ball = new Ball(this.gl.canvas);
 		Camera.setCameraControls(this.gl.canvas, this.camera);
+		Ball.setBallControls(this.gl.canvas, this.ball)
+		
 	}
 
 	async addObject(obj) {
@@ -115,6 +121,8 @@ export class Environment {
 	removeObject(objName) {
 		this.objList = this.objList.filter(obj => obj.name != objName);
 	}
+
+	
 
 	async reloadMeshes() {
 		for (let obj of this.objList) {
@@ -128,7 +136,15 @@ export class Environment {
 		this.gl.enable(this.gl.DEPTH_TEST);
 
 		this.camera.moveCamera();
+		
+		this.objList.forEach( obj => {
+			if(obj.name == "ball"){
+					obj.position.x = this.ball.getXPosition();
+					obj.position.y = this.ball.getYPosition();
+			}
+		});
 
-		this.objList.forEach(obj => { obj.render(this.gl, this.programInfo, time, this.camera.getSharedUniforms()) });
+		this.objList.forEach(obj => { 
+			obj.render(this.gl, this.programInfo, time, this.camera.getSharedUniforms()) });
 	}
 }

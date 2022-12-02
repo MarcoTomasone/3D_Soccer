@@ -1,12 +1,12 @@
 import { MeshLoader } from "./MeshLoader.js";
 
 export class ObjectRenderer {
-
+	
 	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, mtlPath = null) {
 		console.log("Generated object renderer for " + name + " from " + filePath);
 		this.name = name;
 		this.filePath = filePath;
-		this.center = center;
+		this.position = center;
 		if (mtlPath) this.mtlPath = mtlPath;
 	}
 
@@ -134,14 +134,16 @@ export class ObjectRenderer {
 		// are at the same space.
 		let u_world = m4.identity();
 
+		
 		// Handle object rotation
-		//u_world = m4.xRotate(u_world, time);
-		//u_world = m4.yRotate(u_world, time);
-		//u_world = m4.zRotate(u_world, time);
+			//u_world = m4.xRotate(u_world, time);
+			//u_world = m4.yRotate(u_world, time);
+			//u_world = m4.zRotate(u_world, time);
+		
 
 		// Handle object translation
-		if (this.center.x != 0 || this.center.y != 0 || this.center.z != 0) {
-			u_world = m4.translate(u_world, this.center.x, this.center.y, this.center.z);
+		if (this.position.x != 0 || this.position.y != 0 || this.position.z != 0) {
+			u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
 		}
 
 		for (const { bufferInfo, material } of this.parts) {
