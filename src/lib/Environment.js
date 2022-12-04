@@ -139,6 +139,7 @@ export class Environment {
 		
 		this.objList.forEach( obj => {
 			if(obj.name == "ball"){
+					this.ball.moveBall();
 					obj.position.x = this.ball.getXPosition();
 					obj.position.y = this.ball.getYPosition();
 			}

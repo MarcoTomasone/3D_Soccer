@@ -136,6 +136,7 @@ export class ObjectRenderer {
 
 		
 		// Handle object rotation
+		//if(this.name == "ball")	
 			//u_world = m4.xRotate(u_world, time);
 			//u_world = m4.yRotate(u_world, time);
 			//u_world = m4.zRotate(u_world, time);
