@@ -2,6 +2,7 @@
 import { Ball } from "../Ball.js";
 import { Camera } from "./Camera.js";
 
+let cameraOnBall = false;
 export class Environment {
 	
 	static vs = `
@@ -108,10 +109,12 @@ export class Environment {
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
+		
 		this.ball = new Ball(this.gl.canvas);
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
-		
+		this.cameraRadioEventListener();
+			
 	}
 	//Add an object to the environment after loading its mesh
 	async addObject(obj) {
@@ -131,6 +134,16 @@ export class Environment {
 		}
 	}
 
+	cameraRadioEventListener() {
+		document.getElementById("cameraOnBall").addEventListener("click", function(){
+			cameraOnBall = true;
+		});
+		
+		document.getElementById("fixedCamera").addEventListener("click", function(){
+			cameraOnBall = false;			
+		});	
+	}
+	
 
 	render(time) {
 		webglUtils.resizeCanvasToDisplaySize(this.gl.canvas);
@@ -142,16 +155,25 @@ export class Environment {
 		
 		this.objList.forEach( obj => {
 			if(obj.name == "ball"){
-					this.ball.moveBall();
-					obj.position.x = this.ball.getXPosition();
-					obj.position.y = this.ball.getYPosition();
-					obj.rotation.x = this.ball.getXRotation();
-					obj.rotation.y = this.ball.getYRotation();
-					//obj.rotation.z = this.ball.getZRotation();
+				this.ball.moveBall();
+				obj.position.x = this.ball.getXPosition();
+				obj.position.y = this.ball.getYPosition();
+				obj.rotation.x = this.ball.getXRotation();
+				obj.rotation.y = this.ball.getYRotation();
+				//obj.rotation.z = this.ball.getZRotation();
+				
+				
+				if(cameraOnBall)
+					this.camera.setCameraTarget([obj.position.x, obj.position.y, obj.position.z])
+				else 
+					this.camera.setCameraTarget([0,0,0]);
 			}
 		});
+		
 
 		this.objList.forEach(obj => { 
 			obj.render(this.gl, this.programInfo, time, this.camera.getSharedUniforms()) });
 	}
+
+
 }

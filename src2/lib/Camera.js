@@ -1,4 +1,5 @@
 export class Camera {
+
 	constructor(canvas) {
 		this.target = [0, 0, 0];
 		this.position = [0, 0, 0]; // This will be overwritten by moveCamera() after a drag movement, to set start position use angle xy and xz
@@ -53,6 +54,10 @@ export class Camera {
 			u_viewWorldPosition: this.position,
 		}
 	};
+
+	setCameraTarget(target) {
+		this.target = target;
+	}
 
 	/**
 	 * Update the camera position after a drag movement

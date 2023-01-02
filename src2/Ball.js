@@ -89,6 +89,7 @@ export class Ball {
     getZRotation(){
         return this.rotation.z;
     }
+    
     collisionChecker(){
         //TODO: Check not exceeding borders, check not colliding whit other obj position
         //Check not exceeding borders
