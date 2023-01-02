@@ -3,7 +3,7 @@ import { Ball } from "../Ball.js";
 import { Camera } from "./Camera.js";
 
 export class Environment {
-
+	
 	static vs = `
 	attribute vec4 a_position;
 	attribute vec3 a_normal;
@@ -87,7 +87,8 @@ export class Environment {
 	`;
 
 	constructor(canvasName) {
-		//Get canvas
+
+		//Get canvas from canvas name 
 		const canvas = document.querySelector(canvasName);
 		if (!canvas) {
 			console.error("Unable to find canvas " + canvasName);
@@ -112,7 +113,7 @@ export class Environment {
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
 	}
-
+	//Add an object to the environment after loading its mesh
 	async addObject(obj) {
 		this.objList.push(obj)
 		await obj.loadMesh(this.gl);
@@ -130,8 +131,10 @@ export class Environment {
 		}
 	}
 
+
 	render(time) {
 		webglUtils.resizeCanvasToDisplaySize(this.gl.canvas);
+		//Set the viewport to the canvas size
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.enable(this.gl.DEPTH_TEST);
 
@@ -142,6 +145,9 @@ export class Environment {
 					this.ball.moveBall();
 					obj.position.x = this.ball.getXPosition();
 					obj.position.y = this.ball.getYPosition();
+					obj.rotation.x = this.ball.getXRotation();
+					obj.rotation.y = this.ball.getYRotation();
+					//obj.rotation.z = this.ball.getZRotation();
 			}
 		});
 

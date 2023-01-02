@@ -1,5 +1,6 @@
 import { MeshLoader } from "./MeshLoader.js";
 
+
 export class ObjectRenderer {
 	
 	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, mtlPath = null) {
@@ -7,6 +8,8 @@ export class ObjectRenderer {
 		this.name = name;
 		this.filePath = filePath;
 		this.position = center;
+		this.rotation = { x: 0, y: 0, z: 0};
+		this.oldPosition = this.position;
 		if (mtlPath) this.mtlPath = mtlPath;
 	}
 
@@ -15,6 +18,7 @@ export class ObjectRenderer {
 		// Load OBJ file
 		const objResponse = await fetch(this.filePath);
 		const objText = await objResponse.text();
+		//Load Mesh from OBJ file
 		const obj = MeshLoader.parseOBJ(objText);
 
 		// Load MTL file
@@ -121,7 +125,7 @@ export class ObjectRenderer {
 
 		console.log("Loaded mesh for " + this.name + ". ", this);
 	}
-
+	
 	render(gl, meshProgramInfo, time, uniforms) {
 		
 
@@ -134,17 +138,23 @@ export class ObjectRenderer {
 		// are at the same space.
 		let u_world = m4.identity();
 
-		
-		// Handle object rotation
-		//if(this.name == "ball")	
-			//u_world = m4.xRotate(u_world, time);
-			//u_world = m4.yRotate(u_world, time);
-			//u_world = m4.zRotate(u_world, time);
-		
-
 		// Handle object translation
-		if (this.position.x != 0 || this.position.y != 0 || this.position.z != 0) {
+		//if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != this.oldPosition.z) {
+		if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
+			this.oldPosition = this.position;
 			u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
+		}
+		
+		if (this.rotation) {
+			if (this.rotation.x != 0) {
+				u_world = m4.xRotate(u_world, this.rotation.x);
+			}
+			if (this.rotation.y != 0) {
+				u_world = m4.yRotate(u_world, this.rotation.y);
+			}
+			if (this.rotation.z != 0) {
+				u_world = m4.zRotate(u_world, this.rotation.z);
+			}
 		}
 
 		for (const { bufferInfo, material } of this.parts) {
@@ -162,4 +172,9 @@ export class ObjectRenderer {
 		}
 
 	}
+
+}
+
+function degToRad(d) {
+	return d * Math.PI / 180;
 }
