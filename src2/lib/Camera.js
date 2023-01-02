@@ -25,6 +25,16 @@ export class Camera {
 			dragging: false,
 			updateCamera: true
 		};
+
+		document.getElementById("zoomCamera").addEventListener("input", function (event) {
+			console.log("Camera Value: " + event.target.value);
+			this.setFov(event.target.value);
+		}.bind(this));
+
+		document.getElementById("defaultFovButton").onclick = function () {
+			document.getElementById("zoomCamera").value = 70;
+			this.setFov(4010); //Equivalent to 70 rad
+		}.bind(this);
 	}
 
 	setAspect(canvas) {
@@ -86,7 +96,7 @@ export class Camera {
 	 * @param {*} camera 
 	 */
 	static setCameraControls(canvas, camera) {
-
+		
 		/**
 		 * On mouse down, set dragging to true and save starting position
 		 */
@@ -161,6 +171,8 @@ export class Camera {
 					break;
 			}
 		});
+		
+		
 	}
 }
 

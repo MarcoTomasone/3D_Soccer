@@ -6,7 +6,7 @@ async function main() {
 	const mainCanvas = document.getElementById("#screenCanvas");
 
 	await env.addObject(new ObjectRenderer("scene", '../resources/scene.obj', {x: 0, y: 0, z: 0}));
-	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.5}));
+	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.7}));
 	
 	
 	function render(time) {

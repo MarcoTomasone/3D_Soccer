@@ -2,7 +2,6 @@
 import { Ball } from "../Ball.js";
 import { Camera } from "./Camera.js";
 
-let cameraOnBall = false;
 export class Environment {
 	
 	static vs = `
@@ -109,11 +108,20 @@ export class Environment {
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
-		
+		this.cameraOnBall = false;
+
 		this.ball = new Ball(this.gl.canvas);
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
-		this.cameraRadioEventListener();
+		
+		//Camera radio buttons event listeners
+		document.getElementById("cameraOnBall").addEventListener("click", function(){
+			this.cameraOnBall = true;
+		}.bind(this));
+		
+		document.getElementById("fixedCamera").addEventListener("click", function(){
+			this.cameraOnBall = false;			
+		}.bind(this));	
 			
 	}
 	//Add an object to the environment after loading its mesh
@@ -134,16 +142,6 @@ export class Environment {
 		}
 	}
 
-	cameraRadioEventListener() {
-		document.getElementById("cameraOnBall").addEventListener("click", function(){
-			cameraOnBall = true;
-		});
-		
-		document.getElementById("fixedCamera").addEventListener("click", function(){
-			cameraOnBall = false;			
-		});	
-	}
-	
 
 	render(time) {
 		webglUtils.resizeCanvasToDisplaySize(this.gl.canvas);
@@ -163,7 +161,7 @@ export class Environment {
 				//obj.rotation.z = this.ball.getZRotation();
 				
 				
-				if(cameraOnBall)
+				if(this.cameraOnBall)
 					this.camera.setCameraTarget([obj.position.x, obj.position.y, obj.position.z])
 				else 
 					this.camera.setCameraTarget([0,0,0]);
