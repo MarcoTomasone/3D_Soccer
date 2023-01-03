@@ -15,7 +15,7 @@
 	</div>
 	<div class="child" id="uiContainer">
 		<form>
-			<p>Comandi</p>
+			<h4> Command Panel</h4>
 			<div>
 				<input type = "radio" id="fixedCamera" name="camera" value="fixedCamera" checked>
 				<label for="camera1">Fixed Camera on [0,0,0]</label>
@@ -27,6 +27,11 @@
 				<input type="range" id="zoomCamera" name="zoomCamera" min="5" max="100" value="70">
 				<label for="zoomCameraLabel">Fov Camera</label>
 				<button id="defaultFovButton" name="defaultFov" type="button">Set Default Fov</button>
+			</div>
+			<div>
+				<button id="defaultAngleButton" name="defaultAngle" type="button">Set Default Camera Angle</button>
+				<button id="upCamera" name="upCamera" type="button" disabled>Up Camera</button>
+				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
 		</form>
 	</div>

@@ -9,6 +9,9 @@ export class Camera {
 		this.far = 2000;
 		this.radius = 50;
 		this.aspect = canvas.clientWidth / canvas.clientHeight;
+		this.cameraOnBall = false;
+		this.rearCamera = false;
+		this.upCamera = false;
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -27,7 +30,6 @@ export class Camera {
 		};
 
 		document.getElementById("zoomCamera").addEventListener("input", function (event) {
-			console.log("Camera Value: " + event.target.value);
 			this.setFov(event.target.value);
 		}.bind(this));
 
@@ -35,6 +37,30 @@ export class Camera {
 			document.getElementById("zoomCamera").value = 70;
 			this.setFov(4010); //Equivalent to 70 rad
 		}.bind(this);
+		
+		document.getElementById("defaultAngleButton").onclick = function () {
+			this.setDefaultAngle();
+		}.bind(this);
+
+		document.getElementById("upCamera").onclick = function () {
+			this.rearCamera = false;
+			this.upCamera = true;
+			this.setUpCamera();
+		}.bind(this);
+
+		document.getElementById("rearCamera").onclick = function () {
+			this.upCamera = false;
+			this.rearCamera = true;
+			this.setRearCamera();
+		}.bind(this);
+	}
+
+	getisUpCamera() {
+		return this.upCamera;
+	}
+
+	getisRearCamera() {
+		return this.rearCamera;
 	}
 
 	setAspect(canvas) {
@@ -44,9 +70,71 @@ export class Camera {
 	setFov(fovDeg) {
 		this.fovRad = degToRad(fovDeg);
 	}
-
+	
 	getFov() {
 		return radToDeg(this.fovRad);
+	}
+	
+	setCameraTarget(target) {
+		this.target = target;
+	}
+
+	setCameraPosition(position) {
+		this.position = position;
+	}
+
+	setDefaultAngle() {
+		this.movement = {
+			delta: {
+				x: 0,
+				y: 0
+			},
+			angle: {
+				xy: this.defaultAngle.xy,
+				xz: this.defaultAngle.xz
+			},
+			dragging: false,
+			updateCamera: true
+		};
+	}
+
+	setUpCamera() {	
+		console.log("Ciao" + this.movement) 
+		this.setCameraPosition([0, 0, 0]);
+		this.setRadius(30);
+		this.movement = {
+			delta: {
+				x: 0,
+				y: 0
+			},
+			angle: {
+				xy: -Math.PI,
+				xz: 1.5
+			},
+			dragging: false,
+			updateCamera: true
+		};
+	}
+
+	setRearCamera() {
+		console.log(this.movement)
+		this.setRadius(10);
+		this.movement = {
+			delta: {
+				x: 0,
+				y: 0
+			},
+			angle: {
+				xy: -Math.PI,
+				xz: 0.1
+			},
+			dragging: false,
+			updateCamera: true
+		};
+	}
+
+	setRadius(radius) {
+		this.radius = radius;
 	}
 
 	getSharedUniforms = () => {
@@ -65,9 +153,6 @@ export class Camera {
 		}
 	};
 
-	setCameraTarget(target) {
-		this.target = target;
-	}
 
 	/**
 	 * Update the camera position after a drag movement
@@ -87,6 +172,9 @@ export class Camera {
 		this.movement.angle.xy = this.defaultAngle.xy;
 		this.movement.angle.xz = this.defaultAngle.xz;
 		this.movement.updateCamera = true;
+		this.setFov(4010); //Equivalent to 70 rad
+		this.setRadius(50);
+		this.rearCamera = false;
 		this.moveCamera();
 	}
 
@@ -143,7 +231,7 @@ export class Camera {
 			 */
 			function lockAngle(angle, maxRad) {
 				if (angle > maxRad) return maxRad;
-				if (angle < -maxRad) return -maxRad;
+				if (angle < 0) return 0;
 				return angle;
 			}
 

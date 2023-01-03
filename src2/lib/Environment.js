@@ -108,21 +108,22 @@ export class Environment {
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
-		this.cameraOnBall = false;
-
 		this.ball = new Ball(this.gl.canvas);
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
 		//Camera radio buttons event listeners
+		
+		
 		document.getElementById("cameraOnBall").addEventListener("click", function(){
 			this.cameraOnBall = true;
 		}.bind(this));
 		
 		document.getElementById("fixedCamera").addEventListener("click", function(){
-			this.cameraOnBall = false;			
+			this.cameraOnBall = false;		
+			this.camera.resetCamera();
 		}.bind(this));	
-			
+		
 	}
 	//Add an object to the environment after loading its mesh
 	async addObject(obj) {
@@ -161,11 +162,22 @@ export class Environment {
 				//obj.rotation.z = this.ball.getZRotation();
 				
 				
-				if(this.cameraOnBall)
+				if(this.cameraOnBall){
 					this.camera.setCameraTarget([obj.position.x, obj.position.y, obj.position.z])
-				else 
+					document.getElementById("rearCamera").disabled = false;
+					document.getElementById("upCamera").disabled = false;
+				}
+				else {
 					this.camera.setCameraTarget([0,0,0]);
+					document.getElementById("rearCamera").disabled = true;
+					document.getElementById("upCamera").disabled = true;
+				}
+				
+				if(this.camera.getisRearCamera())
+					this.camera.setCameraPosition([obj.position.x - 2, obj.position.y, obj.position.z + 1]);
 			}
+
+			
 		});
 		
 
