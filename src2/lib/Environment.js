@@ -86,7 +86,7 @@ export class Environment {
 	}
 	`;
 
-	constructor(canvasName) {
+	constructor(canvasName, yellowCardXposition, yellowCardYposition ) {
 
 		//Get canvas from canvas name 
 		const canvas = document.querySelector(canvasName);
@@ -104,11 +104,13 @@ export class Environment {
 
 		//Compiles and links the shaders, looks up attribute and uniform locations
 		this.programInfo = webglUtils.createProgramInfo(this.gl, [Environment.vs, Environment.fs]);
+		this.yellowCardXposition = yellowCardXposition;
+		this.yellowCardYposition = yellowCardYposition;
 
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
-		this.ball = new Ball(this.gl.canvas);
+		this.ball = new Ball(this.gl.canvas, this.yellowCardXposition, this.yellowCardYposition, this.removeObject.bind(this));
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
@@ -143,6 +145,15 @@ export class Environment {
 		}
 	}
 
+	checkAllCardsGathered() {
+		var allCardsGathered = true;
+		this.objList.forEach( obj => {
+			if(obj.name.startsWith("yellowCard")){
+				allCardsGathered = false;
+			}
+		});
+		return allCardsGathered;
+	}
 
 	render(time) {
 		webglUtils.resizeCanvasToDisplaySize(this.gl.canvas);
@@ -176,6 +187,14 @@ export class Environment {
 				if(this.camera.getisRearCamera())
 					this.camera.setCameraPosition([obj.position.x - 2, obj.position.y, obj.position.z + 1]);
 			}
+			
+			if(obj.name.startsWith("yellowCard") || obj.name == "redCard")
+				obj.rotation.z += 0.1;
+
+			//TODO: if(this.checkAllCardsGathered() && obj.name == "redCard" )
+					//Metti colore rosso e rendi visibile
+
+
 
 			
 		});
@@ -185,5 +204,5 @@ export class Environment {
 			obj.render(this.gl, this.programInfo, time, this.camera.getSharedUniforms()) });
 	}
 
-
+	
 }

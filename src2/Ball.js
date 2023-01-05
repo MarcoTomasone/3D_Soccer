@@ -1,5 +1,5 @@
 export class Ball {
-    constructor(canvas){
+    constructor(canvas, yellowCardXposition, yellowCardYposition, removeObject) {
         this.position =     {x : 0, y : 0, z : 0  }; // x, y, z 
         this.rotation =    {x : 0, y : 0, z : 0  }; // x, y, z
         this.facing = 1;
@@ -13,14 +13,13 @@ export class Ball {
         this.frictionZ = 0.5; 
         
         this.maxAcceleration  = 0.5;
-
-
-        this.velSterzo = 3.2;         // A
-        this.velRitornoSterzo = 0.84; // B, sterzo massimo = A*B / (1-B)
         
         //Dict to track which key is being pressed
         this.keyPressed = { w: false, a: false, s: false, d: false}
 
+        this.yellowCardXposition = yellowCardXposition;
+		this.yellowCardYposition = yellowCardYposition;
+        this.removeObject = removeObject;
     }
 
     //Do a physics step, independent from the rendering. 
@@ -51,11 +50,8 @@ export class Ball {
         this.speed.y = ballSpeed.y;
         this.speed.z = -sinf*ballSpeed.x + cosf*ballSpeed.z;
         
-       
-        //Update position as position = position + velocity * delta t (delta t constant)
-        this.position.x += this.speed.x;
-        this.position.y += this.speed.y;
-        this.position.z += this.speed.z;
+        
+        this.collisionCheckerUpdate(this.speed.x, this.speed.y, this.speed.z)
         
         if(this.speed.x != 0)
             this.rotation.y += this.speed.x ;
@@ -68,7 +64,6 @@ export class Ball {
         
         
         //console.log(this.position);
-        this.collisionChecker()
     }
 
 
@@ -90,10 +85,58 @@ export class Ball {
         return this.rotation.z;
     }
     
-    collisionChecker(){
-        //TODO: Check not exceeding borders, check not colliding whit other obj position
+    collisionCheckerUpdate(speedX, speedY, speedZ){
         //Check not exceeding borders
-          
+        if(this.position.x + speedX < 19.5 && this.position.x + speedX > -19.5)
+        this.position.x += speedX;
+        if(this.position.y + speedY < 9.5 && this.position.y + speedY > -9.5)
+        this.position.y += speedY;
+        
+        //Check not colliding whit other obj position
+        /*
+        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition)) < 0.01 && 
+                Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition)) < 0.01){
+            console.log("yellowCard_1");
+            this.removeObject("yellowCard_1");
+        }
+
+        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition+3)) < 0.01 && 
+        Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition))  < 0.01){
+            console.log("yellowCard_2");
+            this.removeObject("yellowCard_2");
+        }
+        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition+6)) < 0.01 && 
+        Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition))  < 0.01){
+            console.log("yellowCard_3");
+            this.removeObject("yellowCard_3");
+        }*/
+
+        if(this.position.x+speedX <= this.yellowCardXposition + 0.5  && 
+            this.position.x+speedX >= this.yellowCardXposition-0.5  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.5
+                ){
+            console.log("yellowCard_1");
+            this.removeObject("yellowCard_1");
+        }
+
+        if(this.position.x+speedX <= this.yellowCardXposition+3 +0.5  && 
+            this.position.x+speedX >= this.yellowCardXposition+3-0.5  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.5
+                ){
+            console.log("yellowCard_2");
+            this.removeObject("yellowCard_2");
+        }
+        if(this.position.x+speedX <= this.yellowCardXposition+6+0.5  && 
+            this.position.x+speedX >= this.yellowCardXposition+6-0.5  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.5
+                ){
+            console.log("yellowCard_3");
+            this.removeObject("yellowCard_3");
+        }
+    
     }
 
 
