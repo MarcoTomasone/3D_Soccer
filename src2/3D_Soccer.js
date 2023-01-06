@@ -10,7 +10,7 @@ async function main() {
 	var randomY = getRndInteger(-8, 8);
 
 	const env = new Environment("#screenCanvas", randomX, randomY);
-
+	//TODO: far si che le posizioni di spawn siano dentro il campo solo
 	await env.addObject(new ObjectRenderer("scene", '../resources/scene.obj', {x: 0, y: 0, z: 0}));
 	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.7}));
 	await env.addObject(new ObjectRenderer("markerCone", '../resources/markerCone.obj', {x: randomX - 1, y: randomY, z: 0.5}));
@@ -21,7 +21,7 @@ async function main() {
 	await env.addObject(new ObjectRenderer("yellowCard_3", '../resources/YellowCard.obj', {x: randomX + 6, y: randomY, z: 0.001}));
 	randomX = getRndInteger(-10, 10);
 	randomY = getRndInteger(-8, 8);
-	env.addObject(new ObjectRenderer("redCard", '../resources/YellowCard.obj', {x: randomX, y: randomY, z: 0.001}));
+	//env.addObject(new ObjectRenderer("redCard", '../resources/YellowCard.obj', {x: randomX, y: randomY, z: 0.001}));
 	
 	function render(time) {
 		time *= 0.001;  // convert to seconds

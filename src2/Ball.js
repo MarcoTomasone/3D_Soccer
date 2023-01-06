@@ -91,26 +91,8 @@ export class Ball {
         this.position.x += speedX;
         if(this.position.y + speedY < 9.5 && this.position.y + speedY > -9.5)
         this.position.y += speedY;
-        
-        //Check not colliding whit other obj position
-        /*
-        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition)) < 0.01 && 
-                Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition)) < 0.01){
-            console.log("yellowCard_1");
-            this.removeObject("yellowCard_1");
-        }
 
-        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition+3)) < 0.01 && 
-        Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition))  < 0.01){
-            console.log("yellowCard_2");
-            this.removeObject("yellowCard_2");
-        }
-        if(Math.abs(Math.abs(this.position.x+speedX) - Math.abs(this.yellowCardXposition+6)) < 0.01 && 
-        Math.abs(Math.abs(this.position.y+speedY) - Math.abs(this.yellowCardYposition))  < 0.01){
-            console.log("yellowCard_3");
-            this.removeObject("yellowCard_3");
-        }*/
-
+        //Cards Gathering
         if(this.position.x+speedX <= this.yellowCardXposition + 0.5  && 
             this.position.x+speedX >= this.yellowCardXposition-0.5  &&
                 this.position.y+speedY <= this.yellowCardYposition + 0.5 &
@@ -136,6 +118,30 @@ export class Ball {
             console.log("yellowCard_3");
             this.removeObject("yellowCard_3");
         }
+
+        //Marker Cone Collision 
+        if(this.position.x+speedX <= this.yellowCardXposition-1+0.7  && 
+            this.position.x+speedX >= this.yellowCardXposition-1-0.7  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.7
+                )
+            alert("Oh no devi migliorare il tuo dribbling!")
+        
+
+        if(this.position.x+speedX <= this.yellowCardXposition+2+0.7  && 
+            this.position.x+speedX >= this.yellowCardXposition+2-0.7  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.7
+                )
+            
+            alert("Oh no devi migliorare il tuo dribbling!")
+
+        if(this.position.x+speedX <= this.yellowCardXposition+5+0.7  && 
+            this.position.x+speedX >= this.yellowCardXposition+5-0.7  &&
+                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
+                    this.position.y+speedY >= this.yellowCardYposition -0.7
+                )
+            alert("Oh no devi migliorare il tuo dribbling!")
     
     }
 

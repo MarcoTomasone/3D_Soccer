@@ -147,11 +147,14 @@ export class Environment {
 
 	checkAllCardsGathered() {
 		var allCardsGathered = true;
+		var count = 0;
 		this.objList.forEach( obj => {
 			if(obj.name.startsWith("yellowCard")){
+				count ++; 
 				allCardsGathered = false;
 			}
 		});
+		document.getElementById("cardNumParagraph").innerText = "Yellow cards gathered: " + (3-count) + "/3";
 		return allCardsGathered;
 	}
 
@@ -191,12 +194,9 @@ export class Environment {
 			if(obj.name.startsWith("yellowCard") || obj.name == "redCard")
 				obj.rotation.z += 0.1;
 
-			//TODO: if(this.checkAllCardsGathered() && obj.name == "redCard" )
+			if(this.checkAllCardsGathered() && obj.name == "redCard" ){}
 					//Metti colore rosso e rendi visibile
-
-
-
-			
+						
 		});
 		
 
