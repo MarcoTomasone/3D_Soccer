@@ -1,5 +1,5 @@
 export class Ball {
-    constructor(canvas, yellowCardXposition, yellowCardYposition, removeObject) {
+    constructor(canvas, cardsMarkerPositionList, removeObject) {
         this.position =     {x : 0, y : 0, z : 0  }; // x, y, z 
         this.rotation =    {x : 0, y : 0, z : 0  }; // x, y, z
         this.facing = 1;
@@ -11,14 +11,13 @@ export class Ball {
         this.frictionX = 0.75;   
         this.frictionY = 0.75; 
         this.frictionZ = 0.5; 
-        
+        this.cardsGathered = 0;
         this.maxAcceleration  = 0.5;
-        
+        this.cardsMarkerPositionList = cardsMarkerPositionList;
+
         //Dict to track which key is being pressed
         this.keyPressed = { w: false, a: false, s: false, d: false}
-
-        this.yellowCardXposition = yellowCardXposition;
-		this.yellowCardYposition = yellowCardYposition;
+        
         this.removeObject = removeObject;
     }
 
@@ -47,7 +46,7 @@ export class Ball {
         this.speed.z = -sinf*ballSpeed.x + cosf*ballSpeed.z;
         
         
-        this.collisionCheckerUpdate(this.speed.x, this.speed.y, this.speed.z)
+        this.collisionCheckerUpdate(this.speed.x, this.speed.y)
         
         if(this.speed.x != 0)
             this.rotation.y += this.speed.x ;
@@ -81,64 +80,42 @@ export class Ball {
         return this.rotation.z;
     }
     
-    collisionCheckerUpdate(speedX, speedY, speedZ){
+    collisionCheckerUpdate(speedX, speedY){
         //Check not exceeding borders
         if(this.position.x + speedX < 19.5 && this.position.x + speedX > -19.5)
         this.position.x += speedX;
         if(this.position.y + speedY < 9.5 && this.position.y + speedY > -9.5)
         this.position.y += speedY;
-
         //Cards Gathering
-        if(this.position.x+speedX <= this.yellowCardXposition + 0.5  && 
-            this.position.x+speedX >= this.yellowCardXposition-0.5  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.5
-                ){
-            console.log("yellowCard_1");
-            this.removeObject("yellowCard_1");
-        }
-
-        if(this.position.x+speedX <= this.yellowCardXposition+3 +0.5  && 
-            this.position.x+speedX >= this.yellowCardXposition+3-0.5  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.5
-                ){
-            console.log("yellowCard_2");
-            this.removeObject("yellowCard_2");
-        }
-        if(this.position.x+speedX <= this.yellowCardXposition+6+0.5  && 
-            this.position.x+speedX >= this.yellowCardXposition+6-0.5  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.5 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.5
-                ){
-            console.log("yellowCard_3");
-            this.removeObject("yellowCard_3");
-        }
-
-        //Marker Cone Collision 
-        if(this.position.x+speedX <= this.yellowCardXposition-1+0.7  && 
-            this.position.x+speedX >= this.yellowCardXposition-1-0.7  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.7
-                )
-            console.log("Oh no devi migliorare il tuo dribbling!")
-        
-
-        if(this.position.x+speedX <= this.yellowCardXposition+2+0.7  && 
-            this.position.x+speedX >= this.yellowCardXposition+2-0.7  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.7
-                )
+        for(const element of this.cardsMarkerPositionList){
+            console.log(element);
+            if (this.position.x+speedX <= element.x + 0.5  && 
+                this.position.x+speedX >= element.x-0.5  &&
+                    this.position.y+speedY <= element.y + 0.5 &&
+                        this.position.y+speedY >= element.y -0.5 && 
+                            element.visibility == true && 
+                                element.name.startsWith("yellowCard"))    
+                    {
+                console.log("yellowCard");
+                this.removeObject(element.name);
+                this.cardsGathered++;
+                if(this.cardsGathered == 3)
+                    for(const element of this.cardsMarkerPositionList){
+                        element.visibility = true;
+                    }
+            }
             
-            console.log("Oh no devi migliorare il tuo dribbling!")
-
-        if(this.position.x+speedX <= this.yellowCardXposition+5+0.7  && 
-            this.position.x+speedX >= this.yellowCardXposition+5-0.7  &&
-                this.position.y+speedY <= this.yellowCardYposition + 0.7 &
-                    this.position.y+speedY >= this.yellowCardYposition -0.7
-                )
-            console.log("Oh no devi migliorare il tuo dribbling!")
-    
+            if (this.position.x+speedX <= element.x + 0.7  && 
+                    this.position.x+speedX >= element.x-0.7  &&
+                        this.position.y+speedY <= element.y + 0.7 &&
+                            this.position.y+speedY >= element.y -0.7 && 
+                            element.visibility == true && 
+                            element.name == "markerCone")    
+                        {
+                    alert("Devi migliorare il dribbling!");
+                    
+                }        
+        }
     }
 
 

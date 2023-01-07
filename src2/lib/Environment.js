@@ -86,7 +86,7 @@ export class Environment {
 	}
 	`;
 
-	constructor(canvasName, yellowCardXposition, yellowCardYposition ) {
+	constructor(canvasName, objPositionList) {
 
 		//Get canvas from canvas name 
 		const canvas = document.querySelector(canvasName);
@@ -104,13 +104,12 @@ export class Environment {
 
 		//Compiles and links the shaders, looks up attribute and uniform locations
 		this.programInfo = webglUtils.createProgramInfo(this.gl, [Environment.vs, Environment.fs]);
-		this.yellowCardXposition = yellowCardXposition;
-		this.yellowCardYposition = yellowCardYposition;
-
+		this.objPositionList = objPositionList;
+		
 		this.objList = [];
 
 		this.camera = new Camera(this.gl.canvas);
-		this.ball = new Ball(this.gl.canvas, this.yellowCardXposition, this.yellowCardYposition, this.removeObject.bind(this));
+		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
@@ -199,7 +198,7 @@ export class Environment {
 				obj.rotation.z += 0.01;
 				
 			if(this.checkAllCardsGathered()){
-				if(obj.name == "redCard"){
+				if(obj.name == "markerCone"){
 					obj.visibility = true;
 				}
 				if(obj.name == "refree"){
