@@ -1,7 +1,7 @@
 
 import { Ball } from "../Ball.js";
 import { Camera } from "./Camera.js";
-
+import { Refree } from "../Refree.js";
 export class Environment {
 	
 	static vs = `
@@ -111,6 +111,7 @@ export class Environment {
 
 		this.camera = new Camera(this.gl.canvas);
 		this.ball = new Ball(this.gl.canvas, this.yellowCardXposition, this.yellowCardYposition, this.removeObject.bind(this));
+		this.refree = null;
 		Camera.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
@@ -194,8 +195,27 @@ export class Environment {
 			if(obj.name.startsWith("yellowCard") || obj.name == "redCard")
 				obj.rotation.z += 0.1;
 
-			if(this.checkAllCardsGathered() && obj.name == "redCard" ){}
+			if(obj.name == "refree")
+				obj.rotation.z += 0.01;
+				
+			if(this.checkAllCardsGathered()){
+				if(obj.name == "redCard"){
+					obj.visibility = true;
+				}
+				if(obj.name == "refree"){
+					obj.visibility = true;
+					if(this.refree == null)
+						this.refree = new Refree(this.ball.getXPosition(), this.ball.getYPosition());
+					else {
+						this.refree.moveRefree(this.ball.getXPosition(), this.ball.getYPosition());
+						obj.position.x = this.refree.getXPosition();
+						obj.position.y = this.refree.getYPosition();
+					}
+				}
+				
+			}
 					//Metti colore rosso e rendi visibile
+				
 						
 		});
 		

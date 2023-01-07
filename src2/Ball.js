@@ -35,10 +35,6 @@ export class Ball {
         ballSpeed.y = this.speed.y;
         ballSpeed.z = +sinf*this.speed.x + cosf*this.speed.z;
         
-        //Steering handling
-        // if(this.keyPressed.a) this.steering += this.velSterzo;
-        // if(this.keyPressed.d) this.steering -= this.velSterzo;
-        //this.steering *= this.velRitornoSterzo; //goingBackToLockedSteering
         
         //Friction handling
         ballSpeed.x *= this.frictionX;
@@ -125,7 +121,7 @@ export class Ball {
                 this.position.y+speedY <= this.yellowCardYposition + 0.7 &
                     this.position.y+speedY >= this.yellowCardYposition -0.7
                 )
-            alert("Oh no devi migliorare il tuo dribbling!")
+            console.log("Oh no devi migliorare il tuo dribbling!")
         
 
         if(this.position.x+speedX <= this.yellowCardXposition+2+0.7  && 
@@ -134,14 +130,14 @@ export class Ball {
                     this.position.y+speedY >= this.yellowCardYposition -0.7
                 )
             
-            alert("Oh no devi migliorare il tuo dribbling!")
+            console.log("Oh no devi migliorare il tuo dribbling!")
 
         if(this.position.x+speedX <= this.yellowCardXposition+5+0.7  && 
             this.position.x+speedX >= this.yellowCardXposition+5-0.7  &&
                 this.position.y+speedY <= this.yellowCardYposition + 0.7 &
                     this.position.y+speedY >= this.yellowCardYposition -0.7
                 )
-            alert("Oh no devi migliorare il tuo dribbling!")
+            console.log("Oh no devi migliorare il tuo dribbling!")
     
     }
 
@@ -173,7 +169,7 @@ export class Ball {
                 case "d":
                     ball.keyPressed.d = false;
                     ball.speed.y -= 0.15;
-                    ball.speed.x = 0;
+                        ball.speed.x = 0;
                     //ball.position.y = ball.position.y - 0.1*ball.frictionY;
                     break; 
 			}

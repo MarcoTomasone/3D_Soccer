@@ -3,13 +3,14 @@ import { MeshLoader } from "./MeshLoader.js";
 
 export class ObjectRenderer {
 	
-	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, mtlPath = null) {
-		console.log("Generated object renderer for " + name + " from " + filePath);
+	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, visibility, mtlPath = null) {
+		console.log("Generated object renderer for " + name + " from " + filePath + "visibility: " + visibility);
 		this.name = name;
 		this.filePath = filePath;
 		this.position = center;
 		this.rotation = { x: 0, y: 0, z: 0};
 		this.oldPosition = this.position;
+		this.visibility = visibility;
 		if (mtlPath) this.mtlPath = mtlPath;
 	}
 
@@ -127,50 +128,50 @@ export class ObjectRenderer {
 	}
 	
 	render(gl, meshProgramInfo, time, uniforms) {
-		
+		if(this.visibility){
 
-		gl.useProgram(meshProgramInfo.program);
-
-		// calls gl.uniform
-		webglUtils.setUniforms(meshProgramInfo, uniforms);
-
-		// compute the world matrix once since all parts
-		// are at the same space.
-		let u_world = m4.identity();
-
-		// Handle object translation
-		//if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != this.oldPosition.z) {
-		if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
-			this.oldPosition = this.position;
-			u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
-		}
-		
-		if (this.rotation) {
-			if (this.rotation.x != 0) {
-				u_world = m4.xRotate(u_world, this.rotation.x);
-			}
-			if (this.rotation.y != 0) {
-				u_world = m4.yRotate(u_world, this.rotation.y);
-			}
-			if (this.rotation.z != 0) {
-				u_world = m4.zRotate(u_world, this.rotation.z);
-			}
-		}
-
-		for (const { bufferInfo, material } of this.parts) {
-
-			// calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
-			webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
+			gl.useProgram(meshProgramInfo.program);
 
 			// calls gl.uniform
-			webglUtils.setUniforms(meshProgramInfo, {
-				u_world,
-			}, material);
+			webglUtils.setUniforms(meshProgramInfo, uniforms);
 
-			// calls gl.drawArrays or gl.drawElements
-			webglUtils.drawBufferInfo(gl, bufferInfo);
+			// compute the world matrix once since all parts
+			// are at the same space.
+			let u_world = m4.identity();
+
+			// Handle object translation
+			//if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != this.oldPosition.z) {
+			if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
+				this.oldPosition = this.position;
+				u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
+			}
+			
+			if (this.rotation) {
+				if (this.rotation.x != 0) {
+					u_world = m4.xRotate(u_world, this.rotation.x);
+				}
+				if (this.rotation.y != 0) {
+					u_world = m4.yRotate(u_world, this.rotation.y);
+				}
+				if (this.rotation.z != 0) {
+					u_world = m4.zRotate(u_world, this.rotation.z);
+				}
+			}
+			
+			for (const { bufferInfo, material } of this.parts) {
+
+				// calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
+				webglUtils.setBuffersAndAttributes(gl, meshProgramInfo, bufferInfo);
+
+				// calls gl.uniform
+				webglUtils.setUniforms(meshProgramInfo, {
+					u_world,
+				}, material);
+
+				// calls gl.drawArrays or gl.drawElements
+				webglUtils.drawBufferInfo(gl, bufferInfo);
+			}
 		}
-
 	}
 
 }
