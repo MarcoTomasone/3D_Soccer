@@ -210,12 +210,8 @@ export class Environment {
 						obj.position.x = this.refree.getXPosition();
 						obj.position.y = this.refree.getYPosition();
 					}
-				}
-				
-			}
-					//Metti colore rosso e rendi visibile
-				
-						
+				}	
+			}			
 		});
 		
 

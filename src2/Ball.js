@@ -8,11 +8,11 @@ export class Ball {
         this.steering = 0;
         //The friction value is a value in the range [0,1]. The friction controls the percentage of speed preserved 
         //Smaller value results in bigger friction, larger value results in smaller friction
-        this.frictionX = 0.75;   
-        this.frictionY = 0.75; 
+        this.frictionX = 0.65;   
+        this.frictionY = 0.65; 
         this.frictionZ = 0.5; 
         this.cardsGathered = 0;
-        this.maxAcceleration  = 0.5;
+        this.maxAcceleration  = 0.07;
         this.cardsMarkerPositionList = cardsMarkerPositionList;
 
         //Dict to track which key is being pressed
@@ -34,6 +34,20 @@ export class Ball {
         ballSpeed.y = this.speed.y;
         ballSpeed.z = +sinf*this.speed.x + cosf*this.speed.z;
         
+        if(this.keyPressed.w ) {
+            ballSpeed.x += this.maxAcceleration;
+            this.rotation.x = 0;
+        }
+        if(this.keyPressed.s ){ 
+            ballSpeed.x -= this.maxAcceleration;
+            this.rotation.x = 0;
+        }
+        if(this.keyPressed.a ){
+            ballSpeed.y += this.maxAcceleration;
+        }
+        if(this.keyPressed.d ){
+            ballSpeed.y -= this.maxAcceleration;
+        }
         
         //Friction handling
         ballSpeed.x *= this.frictionX;
@@ -124,30 +138,18 @@ export class Ball {
 			switch (event.key) {
                 case "w":
                     ball.keyPressed.w = true;
-                    ball.speed.x += 0.15;
-                    ball.speed.y = 0;
-                    //ball.position.x = ball.position.x + 0.1*ball.frictionX;
 					break;
 
                 case "s":
                     ball.keyPressed.s = true;
-                    ball.speed.x -= 0.15;
-                    ball.speed.y = 0;
-                    //ball.position.x = ball.position.x - 0.1*ball.frictionX;
                     break;
 
                 case "a":
-                    ball.keyPressed.a = false;
-                    ball.speed.y += 0.15;
-                    ball.speed.x = 0;
-                    //ball.position.y = ball.position.y + 0.1*ball.frictionY;
+                    ball.keyPressed.a = true;
                     break;
    
                 case "d":
-                    ball.keyPressed.d = false;
-                    ball.speed.y -= 0.15;
-                        ball.speed.x = 0;
-                    //ball.position.y = ball.position.y - 0.1*ball.frictionY;
+                    ball.keyPressed.d = true;
                     break; 
 			}
 		});
