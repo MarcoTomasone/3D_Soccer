@@ -1,5 +1,6 @@
 export class Ball {
     constructor(canvas, cardsMarkerPositionList, removeObject) {
+        this.canvas = canvas;
         this.position =     {x : 0, y : 0, z : 0  }; // x, y, z 
         this.rotation =    {x : 0, y : 0, z : 0  }; // x, y, z
         this.facing = 1;
@@ -8,8 +9,8 @@ export class Ball {
         this.steering = 0;
         //The friction value is a value in the range [0,1]. The friction controls the percentage of speed preserved 
         //Smaller value results in bigger friction, larger value results in smaller friction
-        this.frictionX = 0.65;   
-        this.frictionY = 0.65; 
+        this.frictionX = 0.70;   
+        this.frictionY = 0.70; 
         this.frictionZ = 0.5; 
         this.cardsGathered = 0;
         this.maxAcceleration  = 0.07;
@@ -102,15 +103,12 @@ export class Ball {
         this.position.y += speedY;
         //Cards Gathering
         for(const element of this.cardsMarkerPositionList){
-            console.log(element);
             if (this.position.x+speedX <= element.x + 0.5  && 
-                this.position.x+speedX >= element.x-0.5  &&
-                    this.position.y+speedY <= element.y + 0.5 &&
-                        this.position.y+speedY >= element.y -0.5 && 
-                            element.visibility == true && 
-                                element.name.startsWith("yellowCard"))    
-                    {
-                console.log("yellowCard");
+                    this.position.x+speedX >= element.x-0.5  &&
+                        this.position.y+speedY <= element.y + 0.5 &&
+                            this.position.y+speedY >= element.y -0.5 && 
+                                element.visibility == true && 
+                                    element.name.startsWith("yellowCard")) {
                 this.removeObject(element.name);
                 this.cardsGathered++;
                 if(this.cardsGathered == 3)
@@ -124,11 +122,22 @@ export class Ball {
                         this.position.y+speedY <= element.y + 0.7 &&
                             this.position.y+speedY >= element.y -0.7 && 
                             element.visibility == true && 
-                            element.name == "markerCone")    
-                        {
-                    alert("Devi migliorare il dribbling!");
-                    
-                }        
+                            element.name == "markerCone"){   
+                                const textcanvas = document.getElementById("upperCanvas");
+                                const ctx = textcanvas.getContext("2d");
+                                const game_over = new Image();
+                                game_over.src = "../resources/gameOver.png";
+                                game_over.addEventListener('load', function() {});
+                                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                                ctx.drawImage(game_over, 0, 0, textcanvas.clientWidth, textcanvas.clientHeight);     
+                                ctx.font = '40pt Verdana Pro Black'; //TODO: change font
+                                ctx.fillStyle = 'white';
+                                ctx.fillText("You have to improve yor dribbling!", 300,50);
+                                // TODO: STOP RENDER   
+                                //Reload game on click
+                            
+                                
+            }        
         }
     }
 
@@ -158,22 +167,18 @@ export class Ball {
 			switch (event.key) {
                 case "w":
                     ball.keyPressed.w = false;
-                    //ball.position.x = ball.position.x + 0.1*ball.frictionX;
 					break;
 
                 case "s":
                     ball.keyPressed.s = false;
-                    //ball.position.x = ball.position.x - 0.1*ball.frictionX;
                     break;
 
                 case "a":
                     ball.keyPressed.a = false;
-                    //ball.position.y = ball.position.y + 0.1*ball.frictionY;
                     break;
    
                 case "d":
                     ball.keyPressed.d = false;
-                    //ball.position.y = ball.position.y - 0.1*ball.frictionY;
                     break; 
 			}
 		});

@@ -35,10 +35,12 @@ padding-top: 10px;
 padding-left: 10px;
 }
 
-#text {  /*to manage text on canvas and webgl */
-background-color: transparent;  /* needed because we setcanvas bg color to white */
-position: absolute;
-z-index: 1;
-left: 0px;
-top: 0px;
+#upperCanvas {  /*to manage text on canvas and webgl */
+  background-color: transparent;  /* needed because we setcanvas bg color to white */
+  position: absolute;
+  z-index: 1;
+  left: 0px;
+  top: 0px;
+  font-smooth: never;
+  -webkit-font-smoothing : none;
 }

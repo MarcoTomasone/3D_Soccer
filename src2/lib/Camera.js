@@ -146,7 +146,7 @@ export class Camera {
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
 
 		return {
-			u_lightDirection: m4.normalize([-1, 3, 5]), //TODO
+			u_lightDirection: m4.normalize([-1, 3, 5]), //TODO: change light direction
 			u_view: view,
 			u_projection: projection,
 			u_viewWorldPosition: this.position,
@@ -188,7 +188,7 @@ export class Camera {
 		/**
 		 * On mouse down, set dragging to true and save starting position
 		 */
-		canvas.addEventListener("mousedown", function (event) {
+		window.addEventListener("mousedown", function (event) {
 			if (debug == true) console.log("mousedown");
 			camera.movement.old = {
 				x: event.pageX,
@@ -200,7 +200,7 @@ export class Camera {
 		/**
 		 * On mouse up, set dragging to false and update camera position
 		 */
-		canvas.addEventListener("mouseup", function (event) {
+		window.addEventListener("mouseup", function (event) {
 			if (debug == true) console.log("mouseup");
 			camera.moveCamera();
 			camera.movement.dragging = false;
@@ -209,7 +209,7 @@ export class Camera {
 		/**
 		 * On mouse move, update camera position angle if dragging
 		 */
-		canvas.addEventListener("mousemove", function (event) {
+		window.addEventListener("mousemove", function (event) {
 			if (!camera.movement.dragging) return;
 
 			/**
