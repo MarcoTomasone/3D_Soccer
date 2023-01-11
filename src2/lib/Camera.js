@@ -12,6 +12,7 @@ export class Camera {
 		this.cameraOnBall = false;
 		this.rearCamera = false;
 		this.upCamera = false;
+		this.lightDirection = [-1, 3, 5];
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -53,6 +54,27 @@ export class Camera {
 			this.rearCamera = true;
 			this.setRearCamera();
 		}.bind(this);
+
+		document.getElementById("xLight").addEventListener("input", function (event) {
+			this.setLight(0, event.target.value);
+		}.bind(this));
+		document.getElementById("yLight").addEventListener("input", function (event) {
+			this.setLight(1, event.target.value);
+		}.bind(this));
+		document.getElementById("zLight").addEventListener("input", function (event) {
+			this.setLight(2, event.target.value);
+		}.bind(this));
+
+		document.getElementById("defaultLightButton").onclick = function () {
+			document.getElementById("xLight").value = 0;
+			document.getElementById("yLight").value = 3;
+			document.getElementById("zLight").value = 5;
+			this.lightDirection = [-1, 3, 5]; 
+		}.bind(this);
+	}
+
+	setLight(pos, value){
+		this.lightDirection[pos] = value;
 	}
 
 	getisUpCamera() {
@@ -146,7 +168,7 @@ export class Camera {
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
 
 		return {
-			u_lightDirection: m4.normalize([-1, 3, 5]), //TODO: change light direction
+			u_lightDirection: m4.normalize([this.lightDirection[0], this.lightDirection[1],this.lightDirection[2]]),
 			u_view: view,
 			u_projection: projection,
 			u_viewWorldPosition: this.position,
@@ -188,7 +210,7 @@ export class Camera {
 		/**
 		 * On mouse down, set dragging to true and save starting position
 		 */
-		window.addEventListener("mousedown", function (event) {
+		canvas.addEventListener("mousedown", function (event) {
 			if (debug == true) console.log("mousedown");
 			camera.movement.old = {
 				x: event.pageX,
@@ -200,7 +222,7 @@ export class Camera {
 		/**
 		 * On mouse up, set dragging to false and update camera position
 		 */
-		window.addEventListener("mouseup", function (event) {
+		canvas.addEventListener("mouseup", function (event) {
 			if (debug == true) console.log("mouseup");
 			camera.moveCamera();
 			camera.movement.dragging = false;
@@ -209,7 +231,7 @@ export class Camera {
 		/**
 		 * On mouse move, update camera position angle if dragging
 		 */
-		window.addEventListener("mousemove", function (event) {
+		canvas.addEventListener("mousemove", function (event) {
 			if (!camera.movement.dragging) return;
 
 			/**
@@ -252,7 +274,7 @@ export class Camera {
 			camera.movement.updateCamera = true;
 		});
 
-		window.addEventListener("keydown", function (event) {
+		canvas.addEventListener("keydown", function (event) {
 			switch (event.key) {
 				case "r":
 					camera.resetCamera();

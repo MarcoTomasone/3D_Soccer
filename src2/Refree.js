@@ -32,6 +32,13 @@ export class Refree {
             ctx.font = '40pt Verdana Pro Black'; //TODO: change font
             ctx.fillStyle = 'white';
             ctx.fillText("The Refree sent you under the shower!", 300,50);
+            ctx.font = '30pt Verdana Pro Black';
+                                ctx.fillText("Click to play again", 480,100);
+                                // TODO: STOP RENDER   
+                                //Reload game on click
+                                textcanvas.addEventListener('click', function() {
+                                    location.reload();
+                                });
         }
     }
 

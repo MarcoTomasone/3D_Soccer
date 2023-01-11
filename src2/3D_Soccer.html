@@ -16,7 +16,8 @@
 	</div>
 	<div class="child" id="uiContainer">
 		<form>
-			<h4> Command Panel</h4>
+			<h2> Command Panel</h2>
+			<h5> Camera </h5>
 			<div>
 				<input type = "radio" id="fixedCamera" name="camera" value="fixedCamera" checked>
 				<label for="camera1">Fixed Camera on [0,0,0]</label>
@@ -24,16 +25,24 @@
 				<label for="camera1">Camera on Ball</label>
 			</div>
 			<div>
-			<div>
+			<Wdiv>
 				<input type="range" id="zoomCamera" name="zoomCamera" min="5" max="100" value="70">
 				<label for="zoomCameraLabel">Fov Camera</label>
 				<button id="defaultFovButton" name="defaultFov" type="button">Set Default Fov</button>
-			</div>
+			</Wdiv>
 			<div>
 				<button id="defaultAngleButton" name="defaultAngle" type="button">Set Default Camera Angle</button>
 				<button id="upCamera" name="upCamera" type="button" disabled>Up Camera</button>
 				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
+			<h5> Light </h5>
+			<input type="range" id="xLight" name="xLight" min="0" max="100" value="0">
+			<label for="xLight">Light X direction</label><br>
+			<input type="range" id="yLight" name="yLight" min="0" max="100" value="3">
+			<label for="yLight">Light Y direction</label><br>
+			<input type="range" id="zLight" name="zLight" min="0" max="100" value="5">
+			<label for="zLight">Light Z direction</label><br>
+			<button id="defaultLightButton" name="defaultLight" type="button">Set Default Light</button>
 		</form>
 
 		<p id="cardNumParagraph">Text to be overwritten</p>

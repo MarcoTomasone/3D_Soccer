@@ -107,11 +107,11 @@ export class Environment {
 		this.objPositionList = objPositionList;
 		
 		this.objList = [];
-
 		this.camera = new Camera(this.gl.canvas);
 		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
-		Camera.setCameraControls(this.gl.canvas, this.camera);
+		const upperCanvas = document.getElementById("upperCanvas");
+		Camera.setCameraControls(upperCanvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
 		//Camera radio buttons event listeners

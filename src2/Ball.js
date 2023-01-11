@@ -133,9 +133,12 @@ export class Ball {
                                 ctx.font = '40pt Verdana Pro Black'; //TODO: change font
                                 ctx.fillStyle = 'white';
                                 ctx.fillText("You have to improve yor dribbling!", 300,50);
-                                // TODO: STOP RENDER   
+                                ctx.font = '30pt Verdana Pro Black';
+                                ctx.fillText("Click to play again", 480,100);
                                 //Reload game on click
-                            
+                                textcanvas.addEventListener('click', function() {
+                                    location.reload();
+                                });
                                 
             }        
         }
