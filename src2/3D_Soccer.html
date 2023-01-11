@@ -36,11 +36,11 @@
 				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
 			<h5> Light </h5>
-			<input type="range" id="xLight" name="xLight" min="0" max="100" value="0">
+			<input type="range" id="xLight" name="xLight" min="-50" max="50" value="0">
 			<label for="xLight">Light X direction</label><br>
-			<input type="range" id="yLight" name="yLight" min="0" max="100" value="3">
+			<input type="range" id="yLight" name="yLight" min="-50" max="50" value="0">
 			<label for="yLight">Light Y direction</label><br>
-			<input type="range" id="zLight" name="zLight" min="0" max="100" value="5">
+			<input type="range" id="zLight" name="zLight" min="-50" max="70" value="70">
 			<label for="zLight">Light Z direction</label><br>
 			<button id="defaultLightButton" name="defaultLight" type="button">Set Default Light</button>
 		</form>
@@ -53,6 +53,7 @@
 
 <script>
 	var debug = false;
+	var toStop = false;
 	
 	document.getElementById('debugToggle').addEventListener('change', (event) => {
 		if (event.currentTarget.checked) {

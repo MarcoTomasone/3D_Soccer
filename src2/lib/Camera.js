@@ -12,7 +12,7 @@ export class Camera {
 		this.cameraOnBall = false;
 		this.rearCamera = false;
 		this.upCamera = false;
-		this.lightDirection = [-1, 3, 5];
+		this.lightDirection = [0, 0, 70];
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -67,9 +67,9 @@ export class Camera {
 
 		document.getElementById("defaultLightButton").onclick = function () {
 			document.getElementById("xLight").value = 0;
-			document.getElementById("yLight").value = 3;
-			document.getElementById("zLight").value = 5;
-			this.lightDirection = [-1, 3, 5]; 
+			document.getElementById("yLight").value = 0;
+			document.getElementById("zLight").value = 70;
+			this.lightDirection = [0, 0, 70]; 
 		}.bind(this);
 	}
 

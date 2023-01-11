@@ -97,7 +97,7 @@ export class Ball {
     
     collisionCheckerUpdate(speedX, speedY){
         //Check not exceeding borders
-        if(this.position.x + speedX < 19.5 && this.position.x + speedX > -19.5)
+        if(this.position.x + speedX < 19 && this.position.x + speedX > -19.5)
         this.position.x += speedX;
         if(this.position.y + speedY < 9.5 && this.position.y + speedY > -9.5)
         this.position.y += speedY;
@@ -135,7 +135,7 @@ export class Ball {
                                 ctx.fillText("You have to improve yor dribbling!", 300,50);
                                 ctx.font = '30pt Verdana Pro Black';
                                 ctx.fillText("Click to play again", 480,100);
-                                //Reload game on click
+                                toStop = true;
                                 textcanvas.addEventListener('click', function() {
                                     location.reload();
                                 });

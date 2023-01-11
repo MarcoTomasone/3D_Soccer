@@ -33,12 +33,12 @@ export class Refree {
             ctx.fillStyle = 'white';
             ctx.fillText("The Refree sent you under the shower!", 300,50);
             ctx.font = '30pt Verdana Pro Black';
-                                ctx.fillText("Click to play again", 480,100);
-                                // TODO: STOP RENDER   
-                                //Reload game on click
-                                textcanvas.addEventListener('click', function() {
-                                    location.reload();
-                                });
+            ctx.fillText("Click to play again", 480,100);
+            //Reload game on click
+            toStop = true;  
+            textcanvas.addEventListener('click', function() {
+                location.reload();
+            });
         }
     }
 
