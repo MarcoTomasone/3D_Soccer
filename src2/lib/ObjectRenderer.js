@@ -134,14 +134,13 @@ export class ObjectRenderer {
 
 			// calls gl.uniform
 			webglUtils.setUniforms(meshProgramInfo, uniforms);
-
 			// compute the world matrix once since all parts
 			// are at the same space.
 			let u_world = m4.identity();
-
+			
 			// Handle object translation
 			//if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != this.oldPosition.z) {
-			if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
+				if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
 				this.oldPosition = this.position;
 				u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
 			}
@@ -157,7 +156,6 @@ export class ObjectRenderer {
 					u_world = m4.zRotate(u_world, this.rotation.z);
 				}
 			}
-			
 			for (const { bufferInfo, material } of this.parts) {
 
 				// calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer

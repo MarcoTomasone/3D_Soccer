@@ -1,6 +1,5 @@
 import {Environment} from "./lib/Environment.js";
 import {ObjectRenderer} from "./lib/ObjectRenderer.js";
-
 function getRndInteger(min, max) {
 	var num =  Math.floor(Math.random() * (max - min + 1) ) + min;
 	return (num === -1 || num === 1) ? getRndInteger(min, max) : num;
@@ -34,6 +33,7 @@ async function main() {
 		}	
 	}
 	const env = new Environment("#screenCanvas", positionList);
+	const canvas = document.getElementById("screenCanvas");
 	//TODO: far si che le posizioni di spawn siano dentro il campo solo
 	await env.addObject(new ObjectRenderer("scene", '../resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
 	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
@@ -43,6 +43,15 @@ async function main() {
 		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
 		await env.addObject(new ObjectRenderer(element.name, '../resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
+	/*
+	var joystick = new JoyStick({
+		radius: 20,
+		x: 70,
+		y: canvas.height - 30 ,
+		inner_radius: 15,
+		canvasWidth: canvas.width,
+		canvasHeight: canvas.height,
+	});*/
 	
 	
 

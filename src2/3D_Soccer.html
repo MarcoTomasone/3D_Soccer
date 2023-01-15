@@ -36,11 +36,11 @@
 				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
 			<h5> Light </h5>
-			<input type="range" id="xLight" name="xLight" min="-50" max="50" value="0">
+			<input type="range" id="xLight" name="xLight" min="0" max="450" value="270">
 			<label for="xLight">Light X direction</label><br>
-			<input type="range" id="yLight" name="yLight" min="-50" max="50" value="0">
+			<input type="range" id="yLight" name="yLight" min="100" max="450" value="200">
 			<label for="yLight">Light Y direction</label><br>
-			<input type="range" id="zLight" name="zLight" min="-50" max="70" value="70">
+			<input type="range" id="zLight" name="zLight" min="100" max="350" value="250">
 			<label for="zLight">Light Z direction</label><br>
 			<button id="defaultLightButton" name="defaultLight" type="button">Set Default Light</button>
 		</form>
@@ -66,5 +66,6 @@
 
 <script src="./lib/profLibs/m4.js"></script>
 <script src="./lib/profLibs/webgl-utils.js"></script>
+<script src="./lib/JoyStick.js"></script>
 <script type="module" src="./3D_Soccer.js"></script>
 </html>

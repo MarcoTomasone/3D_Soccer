@@ -1,63 +1,83 @@
 
 import { Ball } from "../Ball.js";
-import { Camera } from "./Camera.js";
+import { Camera } from "./CameraAndLights.js";
 import { Refree } from "../Refree.js";
 export class Environment {
 	
 	static vs = `
 	attribute vec4 a_position;
+	attribute vec2 a_texcoord;
 	attribute vec3 a_normal;
 	attribute vec3 a_tangent;
-	attribute vec2 a_texcoord;
 	attribute vec4 a_color;
   
 	uniform mat4 u_projection;
 	uniform mat4 u_view;
 	uniform mat4 u_world;
+	uniform mat4 u_textureMatrix;
+	uniform vec3 u_lightPosition;
 	uniform vec3 u_viewWorldPosition;
+	uniform vec3 u_lightWorldPosition;
   
+	varying vec2 v_texcoord;
+	varying vec4 v_projectedTexcoord;
 	varying vec3 v_normal;
 	varying vec3 v_tangent;
 	varying vec3 v_surfaceToView;
-	varying vec2 v_texcoord;
+	varying vec3 v_surfaceToLight;
 	varying vec4 v_color;
   
 	void main() {
+
 	  vec4 worldPosition = u_world * a_position;
 	  gl_Position = u_projection * u_view * worldPosition;
-	  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
-	  mat3 normalMat = mat3(u_world);
-	  v_normal = normalize(normalMat * a_normal);
-	  v_tangent = normalize(normalMat * a_tangent);
-  
 	  v_texcoord = a_texcoord;
+	  v_projectedTexcoord = u_textureMatrix * worldPosition;
+	  v_normal = mat3(u_world) * a_normal;
+	  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+	  // compute the world position of the surface
+	  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
+	  v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
+	  mat3 normalMat = mat3(u_world);
+	  v_tangent = normalize(normalMat * a_tangent);
 	  v_color = a_color;
 	}
 	`;
 
 	static fs = `
 	precision highp float;
-  
+
+	varying vec2 v_texcoord;
 	varying vec3 v_normal;
 	varying vec3 v_tangent;
 	varying vec3 v_surfaceToView;
-	varying vec2 v_texcoord;
 	varying vec4 v_color;
-  
+	varying vec3 v_surfaceToLight;
+	varying vec4 v_projectedTexcoord;
+	
 	uniform vec3 diffuse;
-	uniform sampler2D diffuseMap;
 	uniform vec3 ambient;
 	uniform vec3 emissive;
 	uniform vec3 specular;
-	uniform sampler2D specularMap;
-	uniform float shininess;
-	uniform sampler2D normalMap;
-	uniform float opacity;
 	uniform vec3 u_lightDirection;
 	uniform vec3 u_ambientLight;
+	uniform vec3 u_reverseLightDirection;
+	uniform vec4 u_colorMult;
+
+	uniform sampler2D u_texture;
+	uniform sampler2D u_projectedTexture;
+	uniform sampler2D diffuseMap;
+	uniform sampler2D specularMap;
+	uniform sampler2D normalMap;
+
+	uniform float opacity;
+	uniform float shininess;
+	uniform float u_bias;
+	uniform float u_lightIntensity;
+	uniform float u_shadowIntensity;
   
 	void main () {
-	  vec3 normal = normalize(v_normal) * ( float( gl_FrontFacing ) * 2.0 - 1.0 );
+	  vec3 normal = normalize(v_normal);
 	  vec3 tangent = normalize(v_tangent) * ( float( gl_FrontFacing ) * 2.0 - 1.0 );
 	  vec3 bitangent = normalize(cross(normal, tangent));
   
@@ -67,7 +87,10 @@ export class Environment {
   
 	  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
 	  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
-  
+      vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
+	  float light = dot(v_normal, u_reverseLightDirection);
+	  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
+	  float currentDepth = projectedTexcoord.z + u_bias;
 	  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
 	  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
 	  vec4 specularMapColor = texture2D(specularMap, v_texcoord);
@@ -76,11 +99,20 @@ export class Environment {
 	  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
 	  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
 	  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
-  
+      bool inRange =
+			  projectedTexcoord.x >= 0.0 &&
+			  projectedTexcoord.x <= 1.0 &&
+			  projectedTexcoord.y >= 0.0 &&
+			  projectedTexcoord.y <= 1.0;
+
+	  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
+	  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
+	  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
+	  //gl_FragColor = vec4(texColor.rgb * light * shadowLight,texColor.a);
 	  gl_FragColor = vec4(
 		  emissive +
 		  ambient * u_ambientLight +
-		  effectiveDiffuse * fakeLight +
+		  effectiveDiffuse * light +
 		  effectiveSpecular * pow(specularLight, shininess),
 		  effectiveOpacity);
 	}

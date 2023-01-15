@@ -398,7 +398,6 @@
 	  dst = dst || new MatType(16);
 	  var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
 	  var rangeInv = 1.0 / (near - far);
-  
 	  dst[ 0] = f / aspect;
 	  dst[ 1] = 0;
 	  dst[ 2] = 0;

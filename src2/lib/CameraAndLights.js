@@ -12,7 +12,17 @@ export class Camera {
 		this.cameraOnBall = false;
 		this.rearCamera = false;
 		this.upCamera = false;
-		this.lightDirection = [0, 0, 70];
+		
+		this.lightPosition = {x: 10, y: 200, z: 250};
+		this.lightTarget = {x: 0, y: 0, z: 0};
+
+        this.width_projLight= 3000;
+        this.height_projLight= 1200;
+
+        this.fovLight = 12;
+        this.lightIntensity= 2.5;
+        this.shadowIntensity=0.9;
+
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -56,13 +66,16 @@ export class Camera {
 		}.bind(this);
 
 		document.getElementById("xLight").addEventListener("input", function (event) {
-			this.setLight(0, event.target.value);
+			this.setLight("x",event.target.value);
+			//this.setLight(0,event.target.value);
 		}.bind(this));
 		document.getElementById("yLight").addEventListener("input", function (event) {
-			this.setLight(1, event.target.value);
+			this.setLight("y", event.target.value);
+			//this.setLight(1,event.target.value);
 		}.bind(this));
 		document.getElementById("zLight").addEventListener("input", function (event) {
-			this.setLight(2, event.target.value);
+			this.setLight("z", event.target.value);
+			//this.setLight(2,event.target.value);
 		}.bind(this));
 
 		document.getElementById("defaultLightButton").onclick = function () {
@@ -74,7 +87,13 @@ export class Camera {
 	}
 
 	setLight(pos, value){
-		this.lightDirection[pos] = value;
+		if(pos == "x")
+			this.lightPosition.x = value;
+		else if(pos == "y")
+			this.lightPosition.y = value;
+		else if(pos == "z")
+			this.lightPosition.z = value;
+		//this.lightPosition[pos] = value;
 	}
 
 	getisUpCamera() {
@@ -121,7 +140,6 @@ export class Camera {
 	}
 
 	setUpCamera() {	
-		console.log("Ciao" + this.movement) 
 		this.setCameraPosition([0, 0, 0]);
 		this.setRadius(30);
 		this.movement = {
@@ -160,15 +178,28 @@ export class Camera {
 	}
 
 	getSharedUniforms = () => {
+		
+		const lightWorldMatrix = m4.lookAt(
+            [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],          			// position
+            [this.lightTarget.x, this.lightTarget.y, this.lightTarget.y], 	// target
+            this.up,                                				// up
+        );
+
+		const lightProjectionMatrix = m4.perspective( degToRad(this.fovLight),
+			this.width_projLight / this.height_projLight,
+            8,  	// near: top of the frustum
+			700);   // far: bottom of the frustum
 
 		// Compute the camera's matrix using look at.
 		const camera = m4.lookAt(this.position, this.target, this.up);
 		// Make a view matrix from the camera matrix.
 		const view = m4.inverse(camera);
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
-
+		
 		return {
-			u_lightDirection: m4.normalize([this.lightDirection[0], this.lightDirection[1],this.lightDirection[2]]),
+			u_lightDirection: m4.normalize([-1,3,5]),
+			u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
+			u_lightIntensity: this.lightIntensity,
 			u_view: view,
 			u_projection: projection,
 			u_viewWorldPosition: this.position,
