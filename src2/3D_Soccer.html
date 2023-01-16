@@ -13,6 +13,7 @@
 	<div class="container">
 		<canvas id="upperCanvas" width="1280" height="720" ></canvas>
 		<canvas id="screenCanvas" width="1280" height="720"></canvas>
+		<!--<canvas id="screenCanvas" width="1280" height="720" style="background-color: #e6ffff;"></canvas>-->
 	</div>
 	<div class="child" id="uiContainer">
 		<form>
@@ -36,11 +37,11 @@
 				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
 			<h5> Light </h5>
-			<input type="range" id="xLight" name="xLight" min="0" max="450" value="270">
+			<input type="range" id="xLight" name="xLight" min="0" max="450" value="0">
 			<label for="xLight">Light X direction</label><br>
-			<input type="range" id="yLight" name="yLight" min="100" max="450" value="200">
+			<input type="range" id="yLight" name="yLight" min="0" max="450" value="100">
 			<label for="yLight">Light Y direction</label><br>
-			<input type="range" id="zLight" name="zLight" min="100" max="350" value="250">
+			<input type="range" id="zLight" name="zLight" min="0" max="450" value="350">
 			<label for="zLight">Light Z direction</label><br>
 			<button id="defaultLightButton" name="defaultLight" type="button">Set Default Light</button>
 		</form>

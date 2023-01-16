@@ -2,7 +2,7 @@ import {Environment} from "./lib/Environment.js";
 import {ObjectRenderer} from "./lib/ObjectRenderer.js";
 function getRndInteger(min, max) {
 	var num =  Math.floor(Math.random() * (max - min + 1) ) + min;
-	return (num === -1 || num === 1) ? getRndInteger(min, max) : num;
+	return (num > -1 && num < 1) ? getRndInteger(min, max) : num;
 }
 
 function checkIfPositionFree(x, y, positionList){
@@ -38,11 +38,13 @@ async function main() {
 	await env.addObject(new ObjectRenderer("scene", '../resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
 	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
 	await env.addObject(new ObjectRenderer("refree", '../resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
+	await env.addObject(new ObjectRenderer("glass", '../resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
 		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
 		await env.addObject(new ObjectRenderer(element.name, '../resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
+
 	/*
 	var joystick = new JoyStick({
 		radius: 20,
@@ -56,13 +58,15 @@ async function main() {
 	
 
 	function render(time) {
-		//if(!toStop){
+		if(!toStop){
 			time *= 0.001;  // convert to seconds
 
 			env.render(time);
 		
 			requestAnimationFrame(render);
-		//}
+		} 
+		//TODO: else cancel requestAnimationFrame
+
 	}
 	
 	

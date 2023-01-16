@@ -91,7 +91,7 @@ export class Environment {
 	  float light = dot(v_normal, u_reverseLightDirection);
 	  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
 	  float currentDepth = projectedTexcoord.z + u_bias;
-	  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
+	  //float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
 	  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
 	  vec4 specularMapColor = texture2D(specularMap, v_texcoord);
 	  vec3 effectiveSpecular = specular * specularMapColor.rgb;
@@ -108,7 +108,7 @@ export class Environment {
 	  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
 	  float shadowLight = (inRange && projectedDepth <= currentDepth) ? u_shadowIntensity : u_lightIntensity; //2.5;
 	  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
-	  //gl_FragColor = vec4(texColor.rgb * light * shadowLight,texColor.a);
+	  //gl_FragColor = vec4(texColor.rgb * light * shadowLight, texColor.a);
 	  gl_FragColor = vec4(
 		  emissive +
 		  ambient * u_ambientLight +
@@ -139,7 +139,7 @@ export class Environment {
 		this.objPositionList = objPositionList;
 		
 		this.objList = [];
-		this.camera = new Camera(this.gl.canvas);
+		this.camera = new Camera(this.gl.canvas, this.depthTexture);
 		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
 		const upperCanvas = document.getElementById("upperCanvas");
@@ -195,6 +195,10 @@ export class Environment {
 		//Set the viewport to the canvas size
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.enable(this.gl.DEPTH_TEST);
+		this.gl.enable(this.gl.BLEND);
+		this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+
+
 
 		this.camera.moveCamera();
 		
@@ -223,7 +227,7 @@ export class Environment {
 					this.camera.setCameraPosition([obj.position.x - 2, obj.position.y, obj.position.z + 1]);
 			}
 			
-			if(obj.name.startsWith("yellowCard") || obj.name == "redCard")
+			if(obj.name.startsWith("yellowCard"))
 				obj.rotation.z += 0.1;
 
 			if(obj.name == "refree")
@@ -250,6 +254,4 @@ export class Environment {
 		this.objList.forEach(obj => { 
 			obj.render(this.gl, this.programInfo, time, this.camera.getSharedUniforms()) });
 	}
-
-	
 }

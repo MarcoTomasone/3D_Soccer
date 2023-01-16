@@ -1,6 +1,6 @@
 export class Camera {
 
-	constructor(canvas) {
+	constructor(canvas, depthTexture) {
 		this.target = [0, 0, 0];
 		this.position = [0, 0, 0]; // This will be overwritten by moveCamera() after a drag movement, to set start position use angle xy and xz
 		this.up = [0, 0, 1]; // Z axis will be up
@@ -13,7 +13,7 @@ export class Camera {
 		this.rearCamera = false;
 		this.upCamera = false;
 		
-		this.lightPosition = {x: 10, y: 200, z: 250};
+		this.lightPosition = {x: 0, y: 100, z: 350};
 		this.lightTarget = {x: 0, y: 0, z: 0};
 
         this.width_projLight= 3000;
@@ -22,7 +22,7 @@ export class Camera {
         this.fovLight = 12;
         this.lightIntensity= 2.5;
         this.shadowIntensity=0.9;
-
+		
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -80,9 +80,9 @@ export class Camera {
 
 		document.getElementById("defaultLightButton").onclick = function () {
 			document.getElementById("xLight").value = 0;
-			document.getElementById("yLight").value = 0;
-			document.getElementById("zLight").value = 70;
-			this.lightDirection = [0, 0, 70]; 
+			document.getElementById("yLight").value = 100;
+			document.getElementById("zLight").value = 350;
+			this.lightDirection = [0, 100, 350]; 
 		}.bind(this);
 	}
 
@@ -190,6 +190,15 @@ export class Camera {
             8,  	// near: top of the frustum
 			700);   // far: bottom of the frustum
 
+		
+		var textureMatrix = m4.identity();
+		textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
+		textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
+		textureMatrix = m4.multiply(textureMatrix, lightProjectionMatrix);
+		textureMatrix = m4.multiply(textureMatrix, m4.inverse(lightWorldMatrix));
+		//let textureMatrix = m4.identity();
+        //textureMatrix = m4.scale(textureMatrix, 0, 0, 0);
+
 		// Compute the camera's matrix using look at.
 		const camera = m4.lookAt(this.position, this.target, this.up);
 		// Make a view matrix from the camera matrix.
@@ -202,7 +211,9 @@ export class Camera {
 			u_lightIntensity: this.lightIntensity,
 			u_view: view,
 			u_projection: projection,
+			u_textureMatrix: textureMatrix,
 			u_viewWorldPosition: this.position,
+			u_shadowIntensity: this.shadowIntensity,
 		}
 	};
 
@@ -324,3 +335,4 @@ function degToRad(d) {
 function radToDeg(r) {
 	return r * 180 / Math.PI;
 }
+
