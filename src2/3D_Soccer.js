@@ -45,22 +45,16 @@ async function main() {
 		await env.addObject(new ObjectRenderer(element.name, '../resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
 
-	/*
-	var joystick = new JoyStick({
-		radius: 20,
-		x: 70,
-		y: canvas.height - 30 ,
-		inner_radius: 15,
-		canvasWidth: canvas.width,
-		canvasHeight: canvas.height,
-	});*/
 	
 	
-
+	
+	
+	
+	
 	function render(time) {
 		if(!toStop){
 			time *= 0.001;  // convert to seconds
-
+			
 			env.render(time);
 		
 			requestAnimationFrame(render);

@@ -261,10 +261,26 @@ export class Camera {
 			camera.movement.dragging = true;
 		});
 
+		canvas.addEventListener("touchstart", function (event) {	
+			if (debug == true) console.log("mousedown");
+			camera.movement.old = {
+				x: event.pageX,
+				y: event.pageY
+			};
+			camera.movement.dragging = true;
+		});
+
+
 		/**
 		 * On mouse up, set dragging to false and update camera position
 		 */
 		canvas.addEventListener("mouseup", function (event) {
+			if (debug == true) console.log("mouseup");
+			camera.moveCamera();
+			camera.movement.dragging = false;
+		});
+
+		canvas.addEventListener("touchend", function (event) {
 			if (debug == true) console.log("mouseup");
 			camera.moveCamera();
 			camera.movement.dragging = false;
@@ -315,6 +331,51 @@ export class Camera {
 
 			camera.movement.updateCamera = true;
 		});
+
+		canvas.addEventListener("touchmove", function (event) {
+			if (!camera.movement.dragging) return;
+
+			/**
+			 * Make sure that the angle is between -PI and PI. If outside map it to the equivalent angle inside the range.
+			 * @param {*} angle 
+			 * @returns 
+			 */
+			function minimizeAngle(angle) {
+				if (angle > Math.PI) return (angle % Math.PI) - Math.PI;
+				if (angle < -Math.PI) return (angle % Math.PI) + Math.PI;
+				return angle;
+			}
+
+			/**
+			 * Force an angle to be in an interval between -maxRad and maxRad
+			 * @param {*} angle 
+			 * @param {*} maxRad
+			 * @returns 
+			 */
+			function lockAngle(angle, maxRad) {
+				if (angle > maxRad) return maxRad;
+				if (angle < 0) return 0;
+				return angle;
+			}
+
+			if (debug == true) console.log("mousemove", camera.movement);
+
+			// Compute drag delta
+			let deltaY = (-(event.pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
+			let deltaX = (-(event.pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
+
+			// Update camera angle
+			camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
+			camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)-0.001);
+
+			// Save current mouse position
+			camera.movement.old.x = event.pageX;
+			camera.movement.old.y = event.pageY;
+
+			camera.movement.updateCamera = true;
+		});
+
+
 
 		canvas.addEventListener("keydown", function (event) {
 			switch (event.key) {

@@ -8,6 +8,18 @@ body {
   border: thin inset #aaaaaa;
 
 }
+
+#joystick-div {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  width: 200px;
+  height: 200px;
+  z-index: 2;
+  background: transparent;
+  
+
+}
 #uiContainer{
 position: absolute;
 top: 10px;

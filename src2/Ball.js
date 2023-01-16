@@ -146,45 +146,95 @@ export class Ball {
 
 
     static setBallControls(canvas, ball){
-        window.addEventListener("keydown", function (event) {
-			switch (event.key) {
-                case "w":
-                    ball.keyPressed.w = true;
-					break;
-
-                case "s":
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            var Joy1 = new JoyStick('joystick-div', {}, function(stickData) {
+                switch(stickData.cardinalDirection) {
+                case "S":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
                     ball.keyPressed.s = true;
                     break;
-
-                case "a":
+                case "N":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.w = true;
+                    break;
+                case "E":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.d = true;
+                    break;
+                case "W":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
                     ball.keyPressed.a = true;
                     break;
-   
-                case "d":
+                case "NE":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.w = true;
                     ball.keyPressed.d = true;
-                    break; 
-			}
-		});
-
-        window.addEventListener("keyup", function (event) {
-			switch (event.key) {
-                case "w":
-                    ball.keyPressed.w = false;
-					break;
-
-                case "s":
-                    ball.keyPressed.s = false;
                     break;
-
-                case "a":
-                    ball.keyPressed.a = false;
+                case "NW":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.w = true;
+                    ball.keyPressed.a = true;
                     break;
-   
-                case "d":
-                    ball.keyPressed.d = false;
-                    break; 
-			}
-		});
+                case "SE":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.s = true;
+                    ball.keyPressed.d = true;
+                    break;
+                case "SW":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    ball.keyPressed.s = true;
+                    ball.keyPressed.a = true;
+                    break;
+                case "C":
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    break;
+                default:
+                    ball.keyPressed = {w: false, s: false, a: false, d: false};
+                    break;
+            }
+            });  
+        }
+        else{
+            document.getElementById("joystick-div").style.visibility = 'hidden';
+            window.addEventListener("keydown", function (event) {
+                switch (event.key) {
+                    case "w":
+                        ball.keyPressed.w = true;
+                        break;
 
+                    case "s":
+                        ball.keyPressed.s = true;
+                        break;
+
+                    case "a":
+                        ball.keyPressed.a = true;
+                        break;
+    
+                    case "d":
+                        ball.keyPressed.d = true;
+                        break; 
+                }
+            });
+
+            window.addEventListener("keyup", function (event) {
+                switch (event.key) {
+                    case "w":
+                        ball.keyPressed.w = false;
+                        break;
+
+                    case "s":
+                        ball.keyPressed.s = false;
+                        break;
+
+                    case "a":
+                        ball.keyPressed.a = false;
+                        break;
+    
+                    case "d":
+                        ball.keyPressed.d = false;
+                        break; 
+                }
+            });
+        }
     }
 }
