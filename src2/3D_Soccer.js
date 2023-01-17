@@ -52,13 +52,11 @@ async function main() {
 	
 	
 	function render(time) {
-		if(!toStop){
 			time *= 0.001;  // convert to seconds
 			
 			env.render(time);
 		
 			requestAnimationFrame(render);
-		} 
 		//TODO: else cancel requestAnimationFrame
 
 	}

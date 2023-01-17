@@ -195,7 +195,10 @@ export class Environment {
 		//Set the viewport to the canvas size
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.enable(this.gl.DEPTH_TEST);
-		this.gl.enable(this.gl.BLEND);
+		if(!document.querySelector("#transparencyCheckbox").checked)
+				this.gl.disable(this.gl.BLEND);
+		else
+			this.gl.enable(this.gl.BLEND);
 		this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 
 
@@ -229,20 +232,21 @@ export class Environment {
 			
 			if(obj.name.startsWith("yellowCard"))
 				obj.rotation.z += 0.1;
-
-			if(obj.name == "refree")
-				obj.rotation.z += 0.01;
 				
 			if(this.checkAllCardsGathered()){
 				if(obj.name == "markerCone"){
 					obj.visibility = true;
 				}
 				if(obj.name == "refree"){
-					obj.visibility = true;
+					if(toStop)
+						obj.visibility = false;
+					else
+						obj.visibility = true;
 					if(this.refree == null)
 						this.refree = new Refree(this.ball.getXPosition(), this.ball.getYPosition());
 					else {
-						this.refree.moveRefree(this.ball.getXPosition(), this.ball.getYPosition());
+						obj.rotation.z += 0.01;
+						this.refree.moveRefree(this.ball.getXPosition(), this.ball.getYPosition(), obj.visibility);
 						obj.position.x = this.refree.getXPosition();
 						obj.position.y = this.refree.getYPosition();
 					}
