@@ -147,8 +147,6 @@ export class Environment {
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
 		//Camera radio buttons event listeners
-		
-		
 		document.getElementById("cameraOnBall").addEventListener("click", function(){
 			this.cameraOnBall = true;
 		}.bind(this));
@@ -226,6 +224,8 @@ export class Environment {
 					document.getElementById("rearCamera").disabled = true;
 					document.getElementById("upCamera").disabled = true;
 				}
+				if(this.camera.getisUpCamera())
+					this.camera.setCameraPosition([obj.position.x - 1, obj.position.y, obj.position.z + 20]);
 				
 				if(this.camera.getisRearCamera())
 					this.camera.setCameraPosition([obj.position.x - 2, obj.position.y, obj.position.z + 1]);
@@ -233,7 +233,7 @@ export class Environment {
 			
 			if(obj.name.startsWith("yellowCard"))
 				obj.rotation.z += 0.1;
-				
+			
 			if(this.checkAllCardsGathered()){
 				if(obj.name == "markerCone"){
 					obj.visibility = true;

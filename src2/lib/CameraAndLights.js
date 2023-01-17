@@ -93,7 +93,6 @@ export class Camera {
 			this.lightPosition.y = value;
 		else if(pos == "z")
 			this.lightPosition.z = value;
-		//this.lightPosition[pos] = value;
 	}
 
 	getisUpCamera() {
@@ -214,7 +213,6 @@ export class Camera {
 		}
 	};
 
-
 	/**
 	 * Update the camera position after a drag movement
 	 */
@@ -234,8 +232,10 @@ export class Camera {
 		this.movement.angle.xz = this.defaultAngle.xz;
 		this.movement.updateCamera = true;
 		this.setFov(4010); //Equivalent to 70 rad
+		document.getElementById("zoomCamera").value = 70;
 		this.setRadius(50);
 		this.rearCamera = false;
+		this.upCamera = false;
 		this.moveCamera();
 	}
 
