@@ -35,15 +35,15 @@ async function main() {
 	const env = new Environment("#screenCanvas", positionList);
 	const canvas = document.getElementById("screenCanvas");
 	//TODO: far si che le posizioni di spawn siano dentro il campo solo
-	await env.addObject(new ObjectRenderer("plane", '../resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
-	await env.addObject(new ObjectRenderer("ball", '../resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
-	await env.addObject(new ObjectRenderer("refree", '../resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
-	await env.addObject(new ObjectRenderer("scene", '../resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
-	await env.addObject(new ObjectRenderer("glass", '../resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
+	await env.addObject(new ObjectRenderer("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
+	await env.addObject(new ObjectRenderer("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
+	await env.addObject(new ObjectRenderer("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
+	await env.addObject(new ObjectRenderer("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
+	await env.addObject(new ObjectRenderer("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
 		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
-		await env.addObject(new ObjectRenderer(element.name, '../resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
+		await env.addObject(new ObjectRenderer(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
 
 	

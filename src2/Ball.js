@@ -13,6 +13,7 @@ export class Ball {
         this.frictionY = 0.70; 
         this.frictionZ = 0.5; 
         this.cardsGathered = 0;
+        this.maxSpeed = 0.35;
         this.maxAcceleration  = 0.07;
         this.cardsMarkerPositionList = cardsMarkerPositionList;
 
@@ -25,7 +26,6 @@ export class Ball {
     //Do a physics step, independent from the rendering. 
     //We can Read but never Write the structure controlled by moveBall()
     moveBall(){
-        
         //Speed in ball space
         var ballSpeed = {x : 0, y : 0, z : 0}; //x, y, z
         //From speed world frame to speed car frame
@@ -36,17 +36,21 @@ export class Ball {
         ballSpeed.z = +sinf*this.speed.x + cosf*this.speed.z;
         
         if(this.keyPressed.w ) {
-            ballSpeed.x += this.maxAcceleration;
+            if( ballSpeed.x + this.maxAcceleration <= this.maxSpeed)
+                ballSpeed.x += this.maxAcceleration;
             this.rotation.x = 0;
         }
         if(this.keyPressed.s ){ 
-            ballSpeed.x -= this.maxAcceleration;
+            if( ballSpeed.x - this.maxAcceleration >= -this.maxSpeed)
+                ballSpeed.x -= this.maxAcceleration;
             this.rotation.x = 0;
         }
         if(this.keyPressed.a ){
-            ballSpeed.y += this.maxAcceleration;
+            if( ballSpeed.y + this.maxAcceleration <= this.maxSpeed)
+                ballSpeed.y += this.maxAcceleration;
         }
         if(this.keyPressed.d ){
+            if( ballSpeed.y - this.maxAcceleration >= -this.maxSpeed)
             ballSpeed.y -= this.maxAcceleration;
         }
         
@@ -95,51 +99,47 @@ export class Ball {
         return this.rotation.z;
     }
     
-    collisionCheckerUpdate(speedX, speedY){
+    async collisionCheckerUpdate(speedX, speedY){
         //Check not exceeding borders
         if(this.position.x + speedX < 19 && this.position.x + speedX > -19.5)
-        this.position.x += speedX;
+            this.position.x += speedX;
         if(this.position.y + speedY < 9.5 && this.position.y + speedY > -9.5)
-        this.position.y += speedY;
+            this.position.y += speedY;
         //Cards Gathering
         for(const element of this.cardsMarkerPositionList){
-            if (this.position.x+speedX <= element.x + 0.5  && 
-                    this.position.x+speedX >= element.x-0.5  &&
-                        this.position.y+speedY <= element.y + 0.5 &&
-                            this.position.y+speedY >= element.y -0.5 && 
-                                element.visibility == true && 
-                                    element.name.startsWith("yellowCard")) {
+            if (element.name.startsWith("yellowCard") && element.visibility == true &&
+                this.position.x <= element.x + 0.5  && 
+                    this.position.x >= element.x-0.5  &&
+                        this.position.y <= element.y + 0.5 &&
+                            this.position.y >= element.y -0.5) {
                 this.removeObject(element.name);
                 this.cardsGathered++;
+                //If i gathered all the cards, show all the hidden markers
                 if(this.cardsGathered == 3)
-                    for(const element of this.cardsMarkerPositionList){
+                    for(const element of this.cardsMarkerPositionList)
                         element.visibility = true;
-                    }
-            }
-            
-            if (this.position.x+speedX <= element.x + 0.7  && 
-                    this.position.x+speedX >= element.x-0.7  &&
-                        this.position.y+speedY <= element.y + 0.7 &&
-                            this.position.y+speedY >= element.y -0.7 && 
-                            element.visibility == true && 
-                            element.name == "markerCone"){   
-                                const textcanvas = document.getElementById("upperCanvas");
-                                const ctx = textcanvas.getContext("2d");
+
+            } else if (element.visibility == true && element.name == "markerCone" &&
+                this.position.x <= element.x + 0.7  && 
+                    this.position.x >= element.x -0.7  &&
+                        this.position.y <= element.y + 0.7 &&
+                            this.position.y >= element.y -0.7){   
+                                const upperCanvas = document.getElementById("upperCanvas");
+                                const ctx = upperCanvas.getContext("2d");
                                 const game_over = new Image();
                                 game_over.src = "../resources/gameOver.png";
-                                game_over.addEventListener('load', function() {});
+                                await game_over.decode();
                                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                                ctx.drawImage(game_over, 0, 0, textcanvas.clientWidth, textcanvas.clientHeight);     
+                                ctx.drawImage(game_over, 0, 0, upperCanvas.clientWidth, upperCanvas.clientHeight);     
                                 ctx.font = '40pt Verdana Pro Black'; //TODO: change font
                                 ctx.fillStyle = 'white';
                                 ctx.fillText("You have to improve yor dribbling!", 300,50);
                                 ctx.font = '30pt Verdana Pro Black';
                                 ctx.fillText("Click to play again", 480,100);
-                                toStop = true;
-                                textcanvas.addEventListener('click', function() {
+                                upperCanvas.addEventListener('click', function() {
                                     location.reload();
                                 });
-                                
+                                toStop = true;           
             }        
         }
     }
