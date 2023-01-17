@@ -196,9 +196,6 @@ export class Camera {
 		textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
 		textureMatrix = m4.multiply(textureMatrix, lightProjectionMatrix);
 		textureMatrix = m4.multiply(textureMatrix, m4.inverse(lightWorldMatrix));
-		//let textureMatrix = m4.identity();
-        //textureMatrix = m4.scale(textureMatrix, 0, 0, 0);
-
 		// Compute the camera's matrix using look at.
 		const camera = m4.lookAt(this.position, this.target, this.up);
 		// Make a view matrix from the camera matrix.
@@ -248,144 +245,116 @@ export class Camera {
 	 * @param {*} camera 
 	 */
 	static setCameraControls(canvas, camera) {
-		
 		/**
-		 * On mouse down, set dragging to true and save starting position
+		 * Make sure that the angle is between -PI and PI. If outside map it to the equivalent angle inside the range.
+		 * @param {*} angle 
+		 * @returns 
 		 */
-		canvas.addEventListener("mousedown", function (event) {
-			if (debug == true) console.log("mousedown");
-			camera.movement.old = {
-				x: event.pageX,
-				y: event.pageY
-			};
-			camera.movement.dragging = true;
-		});
-
-		canvas.addEventListener("touchstart", function (event) {	
-			if (debug == true) console.log("mousedown");
-			camera.movement.old = {
-				x: event.pageX,
-				y: event.pageY
-			};
-			camera.movement.dragging = true;
-		});
-
-
+		function minimizeAngle(angle) {
+			if (angle > Math.PI) return (angle % Math.PI) - Math.PI;
+			if (angle < -Math.PI) return (angle % Math.PI) + Math.PI;
+			return angle;
+		}
 		/**
-		 * On mouse up, set dragging to false and update camera position
+		 * Force an angle to be in an interval between -maxRad and maxRad
+		 * @param {*} angle 
+		 * @param {*} maxRad
+		 * @returns 
 		 */
-		canvas.addEventListener("mouseup", function (event) {
-			if (debug == true) console.log("mouseup");
-			camera.moveCamera();
-			camera.movement.dragging = false;
-		});
-
-		canvas.addEventListener("touchend", function (event) {
-			if (debug == true) console.log("mouseup");
-			camera.moveCamera();
-			camera.movement.dragging = false;
-		});
-
-		/**
-		 * On mouse move, update camera position angle if dragging
-		 */
-		canvas.addEventListener("mousemove", function (event) {
-			if (!camera.movement.dragging) return;
-
-			/**
-			 * Make sure that the angle is between -PI and PI. If outside map it to the equivalent angle inside the range.
-			 * @param {*} angle 
-			 * @returns 
-			 */
-			function minimizeAngle(angle) {
-				if (angle > Math.PI) return (angle % Math.PI) - Math.PI;
-				if (angle < -Math.PI) return (angle % Math.PI) + Math.PI;
-				return angle;
-			}
-
-			/**
-			 * Force an angle to be in an interval between -maxRad and maxRad
-			 * @param {*} angle 
-			 * @param {*} maxRad
-			 * @returns 
-			 */
-			function lockAngle(angle, maxRad) {
-				if (angle > maxRad) return maxRad;
-				if (angle < 0) return 0;
-				return angle;
-			}
-
-			if (debug == true) console.log("mousemove", camera.movement);
-
-			// Compute drag delta
-			let deltaY = (-(event.pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
-			let deltaX = (-(event.pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
-
-			// Update camera angle
-			camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
-			camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)-0.001);
-
-			// Save current mouse position
-			camera.movement.old.x = event.pageX;
-			camera.movement.old.y = event.pageY;
-
-			camera.movement.updateCamera = true;
-		});
-
-		canvas.addEventListener("touchmove", function (event) {
-			if (!camera.movement.dragging) return;
-
-			/**
-			 * Make sure that the angle is between -PI and PI. If outside map it to the equivalent angle inside the range.
-			 * @param {*} angle 
-			 * @returns 
-			 */
-			function minimizeAngle(angle) {
-				if (angle > Math.PI) return (angle % Math.PI) - Math.PI;
-				if (angle < -Math.PI) return (angle % Math.PI) + Math.PI;
-				return angle;
-			}
-
-			/**
-			 * Force an angle to be in an interval between -maxRad and maxRad
-			 * @param {*} angle 
-			 * @param {*} maxRad
-			 * @returns 
-			 */
-			function lockAngle(angle, maxRad) {
-				if (angle > maxRad) return maxRad;
-				if (angle < 0) return 0;
-				return angle;
-			}
-
-			if (debug == true) console.log("mousemove", camera.movement);
-
-			// Compute drag delta
-			let deltaY = (-(event.pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
-			let deltaX = (-(event.pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
-
-			// Update camera angle
-			camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
-			camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)-0.001);
-
-			// Save current mouse position
-			camera.movement.old.x = event.pageX;
-			camera.movement.old.y = event.pageY;
-
-			camera.movement.updateCamera = true;
-		});
-
-
-
-		canvas.addEventListener("keydown", function (event) {
-			switch (event.key) {
-				case "r":
-					camera.resetCamera();
-					break;
-			}
-		});
+		function lockAngle(angle, maxRad) {
+			if (angle > maxRad) return maxRad;
+			if (angle < 0.01) return 0.01;
+			return angle;
+		}
 		
-		
+		if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+			canvas.addEventListener("mousedown", function (event) {
+				if (debug == true) console.log("mousedown");
+				camera.movement.old = {
+					x: event.pageX,
+					y: event.pageY
+				};
+				camera.movement.dragging = true;
+			});
+			
+			canvas.addEventListener("mouseup", function (event) {
+				if (debug == true) console.log("mouseup");
+				camera.moveCamera();
+				camera.movement.dragging = false;
+			});
+
+			canvas.addEventListener("mousemove", function (event) {
+				if (!camera.movement.dragging) return;
+				if (debug == true) console.log("mousemove", camera.movement);
+
+				// Compute drag delta
+				let deltaY = (-(event.pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
+				let deltaX = (-(event.pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
+
+				// Update camera angle
+				camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
+				camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)- 0.001);
+
+				// Save current mouse position
+				camera.movement.old.x = event.pageX;
+				camera.movement.old.y = event.pageY;
+
+				camera.movement.updateCamera = true;
+			});
+
+			canvas.addEventListener("keydown", function (event) {
+				switch (event.key) {
+					case "r":
+						camera.resetCamera();
+						break;
+				}
+			});
+		} else {
+			
+			canvas.addEventListener("touchstart", function (event) {	
+				if (debug == true) console.log("mousedown");
+				camera.movement.old = {
+					x: event.touches[0].pageX,
+					y: event.touches[0].pageY
+				};
+				camera.movement.dragging = true;
+			});
+			
+			/**
+			 * On mouse up, set dragging to false and update camera position
+			 */
+
+			canvas.addEventListener("touchend", function (event) {
+				if (debug == true) console.log("mouseup");
+				camera.moveCamera();
+				camera.movement.dragging = false;
+			});
+
+			/**
+			 * On mouse move, update camera position angle if dragging
+			*/
+
+			canvas.addEventListener("touchmove", function (event) {
+				if (!camera.movement.dragging) return;
+
+				if (debug == true) console.log("mousemove", camera.movement);
+
+				// Compute drag delta
+				let deltaX = (-(event.touches[0].pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
+				let deltaY = (-(event.touches[0].pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
+
+				// Update camera angle
+				
+				camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
+				camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)-0.001);
+				
+				// Save current mouse position
+				camera.movement.old.x = event.touches[0].pageX;			
+				camera.movement.old.y = event.touches[0].pageY;
+				camera.movement.updateCamera = true;
+				
+			});
+		}
 	}
 }
 
