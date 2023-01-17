@@ -22,7 +22,7 @@ async function main() {
 	positionList.push({name: "yellowCard_1", x: randomX, y: randomY, z: 0.01, visibility: true});
 	positionList.push({name: "yellowCard_2", x: randomX + 3, y: randomY, z: 0.01, visibility: true});
 	positionList.push({name: "yellowCard_3", x: randomX + 6, y: randomY, z: 0.01, visibility: true});
-	positionList.push({name: "markerCone", x: randomX - 1, y: randomY, z: 0.5, visibility: true},);
+	positionList.push({name: "markerCone", x: randomX - 1, y: randomY, z: 0.5, visibility: true});
 	positionList.push({name: "markerCone", x: randomX + 2, y: randomY, z: 0.5, visibility: true});
 	positionList.push({name: "markerCone", x: randomX + 5, y: randomY, z: 0.5, visibility: true});
 	for(var i= 0; i < 15; i++){
