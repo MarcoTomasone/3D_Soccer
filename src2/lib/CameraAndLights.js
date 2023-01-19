@@ -1,28 +1,19 @@
 export class Camera {
 
-	constructor(canvas, depthTexture) {
-		this.target = [0, 0, 0];
-		this.position = [0, 0, 0]; // This will be overwritten by moveCamera() after a drag movement, to set start position use angle xy and xz
-		this.up = [0, 0, 1]; // Z axis will be up
+	constructor(canvas) {
+		this.target = {x: 0, y: 0, z: 0};
+		this.position ={x: 0, y: 0, z: 0}; // This will be overwritten by moveCamera() after a drag movement, to set start position use angle xy and xz
+		this.up = {x: 0, y: 0, z: 1}; // Z axis will be up
 		this.fovRad = 70;
 		this.near = 1;
 		this.far = 2000;
 		this.radius = 50;
 		this.aspect = canvas.clientWidth / canvas.clientHeight;
+		//Booleans to keep track the camera type
 		this.cameraOnBall = false;
 		this.rearCamera = false;
 		this.upCamera = false;
-		
-		this.lightPosition = {x: 0, y: 100, z: 350};
-		this.lightTarget = {x: 0, y: 0, z: 0};
-
-        this.width_projLight= 3000;
-        this.height_projLight= 1200;
-
-        this.fovLight = 12;
-        this.lightIntensity= 2.5;
-        this.shadowIntensity=0.9;
-		
+		//Default angle for the camera
 		this.defaultAngle = {
 			xy: degToRad(190),
 			xz: degToRad(30)
@@ -40,6 +31,15 @@ export class Camera {
 			updateCamera: true
 		};
 
+		this.lightPosition = {x: 0, y: 100, z: 350};
+		this.lightTarget = {x: 0, y: 0, z: 0};
+		this.width_projLight= 3000;
+		this.height_projLight= 1200;
+		this.fovLight = 12;
+		this.lightIntensity= 2.5;
+		this.shadowIntensity=0.9;
+		
+		//Set the listeners for the camera
 		document.getElementById("zoomCamera").addEventListener("input", function (event) {
 			this.setFov(event.target.value);
 		}.bind(this));
@@ -65,6 +65,7 @@ export class Camera {
 			this.setRearCamera();
 		}.bind(this);
 
+		//Set listeners for the light
 		document.getElementById("xLight").addEventListener("input", function (event) {
 			this.setLight("x",event.target.value);
 			//this.setLight(0,event.target.value);
@@ -141,7 +142,6 @@ export class Camera {
 	}
 
 	setUpCamera() {	
-		this.setCameraPosition([0, 0, 0]);
 		this.setRadius(30);
 		this.movement = {
 			delta: {
@@ -158,7 +158,6 @@ export class Camera {
 	}
 
 	setRearCamera() {
-		console.log(this.movement)
 		this.setRadius(10);
 		this.movement = {
 			delta: {
@@ -183,22 +182,16 @@ export class Camera {
 		const lightWorldMatrix = m4.lookAt(
             [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],          			// position
             [this.lightTarget.x, this.lightTarget.y, this.lightTarget.y], 	// target
-            this.up,                                				// up
+            [this.up.x, this.up.y, this.up.z]                               				// up
         );
 
-		const lightProjectionMatrix = m4.perspective( degToRad(this.fovLight),
-			this.width_projLight / this.height_projLight,
-            8,  	// near: top of the frustum
-			700);   // far: bottom of the frustum
-
-		
-		var textureMatrix = m4.identity();
-		textureMatrix = m4.translate(textureMatrix, 0.5, 0.5, 0.5);
-		textureMatrix = m4.scale(textureMatrix, 0.5, 0.5, 0.5);
-		textureMatrix = m4.multiply(textureMatrix, lightProjectionMatrix);
-		textureMatrix = m4.multiply(textureMatrix, m4.inverse(lightWorldMatrix));
 		// Compute the camera's matrix using look at.
-		const camera = m4.lookAt(this.position, this.target, this.up);
+		const camera = m4.lookAt(
+			[this.position.x, this.position.y, this.position.z], 
+			[this.target.x, this.target.y, this.target.z],
+			[this.up.x, this.up.y, this.up.z]
+		);
+
 		// Make a view matrix from the camera matrix.
 		const view = m4.inverse(camera);
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
@@ -210,19 +203,17 @@ export class Camera {
 			u_lightIntensity: this.lightIntensity,
 			u_view: view,
 			u_projection: projection,
-			u_textureMatrix: textureMatrix,
-			u_viewWorldPosition: this.position,
+			u_viewWorldPosition: [this.position.x, this.position.y, this.position.z],
 		}
 	};
 
-	/**
-	 * Update the camera position after a drag movement
-	 */
+	
+	//Update the camera position after a drag movement
 	moveCamera() {
 		if (this.movement.updateCamera) {
-			this.position[0] = this.radius * Math.cos(this.movement.angle.xz) * Math.cos(this.movement.angle.xy);
-			this.position[1] = this.radius * Math.cos(this.movement.angle.xz) * Math.sin(this.movement.angle.xy);
-			this.position[2] = this.radius * Math.sin(this.movement.angle.xz);
+			this.position.x = this.radius * Math.cos(this.movement.angle.xz) * Math.cos(this.movement.angle.xy);
+			this.position.y = this.radius * Math.cos(this.movement.angle.xz) * Math.sin(this.movement.angle.xy);
+			this.position.z = this.radius * Math.sin(this.movement.angle.xz);
 			this.movement.updateCamera = false;
 		}
 	}
@@ -240,28 +231,10 @@ export class Camera {
 		this.moveCamera();
 	}
 
-	/**
-	 * Set camera drag movement event listeners
-	 * @param {*} canvas 
-	 * @param {*} camera 
-	 */
+	//Set Camera event listeners
 	static setCameraControls(canvas, camera) {
-		/**
-		 * Make sure that the angle is between -PI and PI. If outside map it to the equivalent angle inside the range.
-		 * @param {*} angle 
-		 * @returns 
-		 */
-		function minimizeAngle(angle) {
-			if (angle > Math.PI) return (angle % Math.PI) - Math.PI;
-			if (angle < -Math.PI) return (angle % Math.PI) + Math.PI;
-			return angle;
-		}
-		/**
-		 * Force an angle to be in an interval between -maxRad and maxRad
-		 * @param {*} angle 
-		 * @param {*} maxRad
-		 * @returns 
-		 */
+		
+		//Lock angle to be between 0 and maxRad. Zero to not going under the ground
 		function lockAngle(angle, maxRad) {
 			if (angle > maxRad) return maxRad;
 			if (angle < 0.01) return 0.01;
@@ -290,13 +263,11 @@ export class Camera {
 				let deltaX = (-(event.pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;
 
 				// Update camera angle
-				camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
+				camera.movement.angle.xy = camera.movement.angle.xy + deltaX;
 				camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)- 0.001);
-
 				// Save current mouse position
 				camera.movement.old.x = event.pageX;
 				camera.movement.old.y = event.pageY;
-
 				camera.movement.updateCamera = true;
 			});
 

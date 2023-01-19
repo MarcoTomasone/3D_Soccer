@@ -27,7 +27,7 @@ export class SceneHandler {
 		this.objList = [];
 		this.objPositionList = objPositionList;
 		//Set up the camera and the ball 
-		this.camera = new Camera(this.gl.canvas, this.depthTexture);
+		this.camera = new Camera(this.gl.canvas);
 		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
 
@@ -112,7 +112,8 @@ export class SceneHandler {
 		else
 			this.gl.enable(this.gl.BLEND);
 		this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
-	
+		
+
 		this.camera.moveCamera();
 		
 		this.objList.forEach( obj => {
@@ -126,20 +127,20 @@ export class SceneHandler {
 				
 				
 				if(this.cameraOnBall){
-					this.camera.setCameraTarget([obj.position.x, obj.position.y, obj.position.z])
+					this.camera.setCameraTarget(obj.position);
 					document.getElementById("rearCamera").disabled = false;
 					document.getElementById("upCamera").disabled = false;
 				}
 				else {
-					this.camera.setCameraTarget([0,0,0]);
+					this.camera.setCameraTarget({x:0, y:0, z:0});
 					document.getElementById("rearCamera").disabled = true;
 					document.getElementById("upCamera").disabled = true;
 				}
 				if(this.camera.getisUpCamera())
-					this.camera.setCameraPosition([obj.position.x - 1, obj.position.y, obj.position.z + 20]);
+					this.camera.setCameraPosition({x: obj.position.x - 1, y: obj.position.y, z: obj.position.z + 20});
 				
 				if(this.camera.getisRearCamera())
-					this.camera.setCameraPosition([obj.position.x - 2, obj.position.y, obj.position.z + 1]);
+					this.camera.setCameraPosition({x: obj.position.x - 2, y: obj.position.y, z:obj.position.z + 1});
 			}
 			
 			if(obj.name.startsWith("yellowCard"))
