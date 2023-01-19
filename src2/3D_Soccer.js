@@ -1,4 +1,4 @@
-import {ObjectRenderer} from "./lib/ObjectRenderer.js";
+import {ObjectClass} from "./lib/ObjectClass.js";
 import { SceneHandler } from "./lib/SceneHandler.js";
 function getRndInteger(min, max) {
 	var num =  Math.floor(Math.random() * (max - min + 1) ) + min;
@@ -35,31 +35,24 @@ async function main() {
 	const scene = new SceneHandler("#screenCanvas", positionList);
 	const canvas = document.getElementById("screenCanvas");
 	//TODO: far si che le posizioni di spawn siano dentro il campo solo
-	await scene.addObject(new ObjectRenderer("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
-	await scene.addObject(new ObjectRenderer("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
-	await scene.addObject(new ObjectRenderer("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
-	await scene.addObject(new ObjectRenderer("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
-	await scene.addObject(new ObjectRenderer("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
+	await scene.addObject(new ObjectClass("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
+	await scene.addObject(new ObjectClass("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
+	await scene.addObject(new ObjectClass("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
+	await scene.addObject(new ObjectClass("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
+	await scene.addObject(new ObjectClass("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
 		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
-		await scene.addObject(new ObjectRenderer(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
+		await scene.addObject(new ObjectClass(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
-
-	
-	
-	
-	
-	
-	
+		
 	function render(time) {
 		if(!toStop){	
 			time *= 0.001;  // convert to seconds
-			
-			scene.render(time);
 		
+			scene.render(time);
+			
 			requestAnimationFrame(render);
-		//TODO: else cancel requestAnimationFrame
 		}
 		else 
 			cancelAnimationFrame(render);

@@ -16,8 +16,51 @@
     </ul>
 </p>
 <p>
-    Lo Scene Handler è la classe che si occupa di fare il setup del gioco. 
-    
+    Lo Scene Handler è la classe che si occupa di fare e gestire il setup del gioco. 
+    Prima di tutto, questa classe trovera i due canvas e inizializzerà su uno il contesto WebGL2 e sull'altro un contesto 2D (che verrà usato per il menù delle istruzioni). 
+    Infine il costruttore si occuperà di compilare gli shaders e inizializzare i vari componenti di cui è composto il gioco (camera, palla e arbitro) e settarne anche i listener per i loro comandi. 
+    La funzione render dello scene Handler è quella che si occupa di gestire tutti i movimenti del gioco e di renderizzare i vari componenti. Inantitutto setta la dimensione del canvas alla dimensione del display e abiliterà trasparenze e profondità.
+    Muoverà poi la camera che calcolerà la nuova posizione della camera e controllerà tutta la lista degli obj e per ogni oggetto chiamerà la funzione render che si occuperà di renderizzare l'oggetto. Prima di renderizzarlo però, a seconda dell'oggetto applicherà delle trasformazioni differenti. Per palla e arbitro calcolerà la loro nuova posizione, per i cartellini gialli calcolerà una rotazione e nel caso ci siano camere particolari (come la camera posteriore o dall'alto) calcolerà anche la posizione della camera.
+</p>
+
+<h3>Obj Loader</h3>
+<p>
+ObjLoader è una classe fortemente basata su dei tutorial di WebGLFoundamentals. 
+https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj.html
+https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html
+Questa classe si occupa principalmente di fare il parsing dei file.obj e .mtl che rappresentano gli oggetti del gioco. 
+</p>
+
+<h3>Object Class</h3>
+Ogni oggetto è un'istanza di questa classe Object Class, che possiede per ogni oggetto una serie di attributi come la posizione, la rotazione e la visibilità. La visibilità di un oggetto serve per scegliere se renderizzare o meno l'oggetto.
+Anche questa classe è ispirata ai tutorial di WebGLFoundamentals elencati in ObjLoader.
+
+<h3>Camera And Lights</h3>
+La classe Camera si occupa di gestire la camera e le luci del gioco. 
+La camera è inizialmente posta su una semisfera che si trova attorno allo stadio e tramite gli opportuni listener permette all'utente di muovere la camera. Inizialmente il target della camera sarà il centro (0,0,0) e la camera si muoverà attorno a questo punto. Si prevede però la possibilità di far si che la camera punti non più il centro, ma punti la palla e quindi la camera aggiornerà la sua inclinazione rispetto ai movimenti della palla. Sono state previste inoltre due camere particolari:
+
+<ul>
+    <li>Camera posteriore: la camera si trova dietro la palla e punta verso di essa</li>
+    <li>Camera dall'alto: la camera si trova sopra la palla e punta verso di essa</li>
+</ul>
+In entrambe queste camere la posizione non è più modificabile dall'utente tramite gli input da mouse e touch ma sarà fissata rispetto alla posizione della palla.
+Lo zoom della camera è gestito tramite uno slider che aumenta o diminuisce il FOV (campo visivo) della camera, questo fa si che la camera si avvicini o si allontani dal target della palla stesso. 
+
+<h3>Ball</h3>
+<p>La classe Ball si occupa di gestire i movimenti e le collisioni della palla. Il funzionamento di questa classe è ispirato al codice car.js proposto dal Prof. Casciola.
+Prima di tutto vengono settati dei listener per i movimenti della palla stessa, questi listener sono collegati ai tasti WASD altrimenti è previsto il movimento touch tramite un joystick nel caso in cui si stia utilizzando la versione mobile del gioco. 
+La libreria del joystick non è stata scritta da me, ma è stata utilizzata una libreria già pronta fornita da: https://github.com/bobboteck/JoyStick, alla quale ho modificato i colori. Per permettere movimenti in diagonale è prevista una keymap che associa ad ogni tasto una direzione e in base ai valori booleani della keymap si sceglie se dare o meno velocità alla palla in quella direzione. La palla ha tre vettori principali che ne determinano i comportamenti:
+<ul>
+    <li>Position: la posizione della palla</li>
+    <li>Speed: la velocità della palla su quell'asse</li>
+    <li>Rotation: la rotazione della palla in quell'asse</li>
+</ul>
+In base al vettore velocità della palla verrà calcolata la nuova posizione della palla e le verrà impressa una certa rotazione. 
+La più importante funzione che governa i comportamenti della palla è la collisionCheckerUpdate, che si occupa di controllare se la palla sta collidendo con gli oggetti del gioco. Prima di tutto controlla che con l'aggiornamento della sua posizione la palla non ecceda i bordi dello stadio, in caso positivo semplicemente la palla non eccederà il muro ma ruoterà contro il muro stesso. Poi vengono controllate le collisioni con i due tipi di oggetti presenti i cartellini gialli che verranno raccolti e i cinesini, che se toccati faranno perdere la partita. Per i cartellini gialli viene controllata la collisione con la palla e se la collisione è avvenuta, il cartellino viene rimosso dalla lista degli oggetti e viene aggiunto un punto al punteggio. Per i cinesini viene controllata la collisione con la palla e se la collisione è avvenuta, la partita viene terminata.
+</p>
+<h3>Refree</h3>
+<p>
+La classe Refree si occupa di gestire i movimenti dell'arbitro. L'arbitro apparirà solo dopo che l'utente con la palla ha raccolto tutti e tre i cartellini gialli posizionati all'interno del percorso con i cinesini. Al momento dello spawn dell'arbitro la sua posizione sarà fissata rispetto a quella attuale della palla. Da quel momento l'arbitro seguirà i movimenti della palla cercando di avvicinarsi ad essa e colpirla, ponendo fine al gioco. Questo è reso possibile aggiornando la posizione dell'arbitro in base alla posizione attuale della palla. L'arbitro è rappresentato da un cubo sul quale è applicata la texture della faccia dell'autore del progetto tramite gli algoritmi di UV mapping di Blender. 
 </p>
 
 

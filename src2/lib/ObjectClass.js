@@ -1,7 +1,7 @@
-import { MeshLoader } from "./MeshLoader.js";
+import { ObjLoader } from "./ObjLoader.js";
 
 
-export class ObjectRenderer {
+export class ObjectClass {
 	
 	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, visibility, mtlPath = null) {
 		console.log("Generated object renderer for " + name + " from " + filePath + "visibility: " + visibility);
@@ -20,7 +20,7 @@ export class ObjectRenderer {
 		const objResponse = await fetch(this.filePath);
 		const objText = await objResponse.text();
 		//Load Mesh from OBJ file
-		const obj = MeshLoader.parseOBJ(objText);
+		const obj = ObjLoader.parseOBJ(objText);
 
 		// Load MTL file
 		const baseHref = new URL(this.filePath, window.location.href);
@@ -31,18 +31,18 @@ export class ObjectRenderer {
 				const response = await fetch(matHref);
 				return await response.text();
 			}));
-			materials = MeshLoader.parseMTL(matTexts.join('\n'));
+			materials = ObjLoader.parseMTL(matTexts.join('\n'));
 		} else {
 			console.log("Loading manually defined MTL file " + this.mtlPath);
 			const mtlResponse = await fetch(this.mtlPath);
 			const mtlText = await mtlResponse.text();
-			materials = MeshLoader.parseMTL(mtlText);
+			materials = ObjLoader.parseMTL(mtlText);
 		}
 
 
 		const textures = {
-			defaultWhite: MeshLoader.create1PixelTexture(gl, [255, 255, 255, 255]),
-			defaultNormal: MeshLoader.create1PixelTexture(gl, [127, 127, 255, 0]),
+			defaultWhite: ObjLoader.create1PixelTexture(gl, [255, 255, 255, 255]),
+			defaultNormal: ObjLoader.create1PixelTexture(gl, [127, 127, 255, 0]),
 		};
 
 		const defaultMaterial = {
@@ -64,7 +64,7 @@ export class ObjectRenderer {
 					let texture = textures[filename];
 					if (!texture) {
 						const textureHref = new URL(filename, baseHref).href;
-						texture = MeshLoader.createTexture(gl, textureHref);
+						texture = ObjLoader.createTexture(gl, textureHref);
 						textures[filename] = texture;
 					}
 					material[key] = texture;
@@ -97,7 +97,7 @@ export class ObjectRenderer {
 
 			// generate tangents if we have the data to do so.
 			if (data.texcoord && data.normal) {
-				data.tangent = MeshLoader.generateTangents(data.position, data.texcoord);
+				data.tangent = ObjLoader.generateTangents(data.position, data.texcoord);
 			} else {
 				// There are no tangents
 				data.tangent = { value: [1, 0, 0] };

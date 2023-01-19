@@ -1,7 +1,7 @@
 
-import { Ball } from "../Ball.js";
+import { Ball } from "./Ball.js";
 import { Camera } from "./CameraAndLights.js";
-import { Refree } from "../Refree.js";
+import { Refree } from "./Refree.js";
 export class SceneHandler {
 	
 	constructor(canvasName, objPositionList) {
@@ -46,6 +46,7 @@ export class SceneHandler {
 		}.bind(this));	
 		
 	}
+
 	//Add an object to the environment after loading its mesh
 	async addObject(obj) {
 		this.objList.push(obj)
@@ -55,12 +56,12 @@ export class SceneHandler {
 	removeObject(objName) {
 		this.objList = this.objList.filter(obj => obj.name != objName);
 	}
-	
+	/*
 	async reloadMeshes() {
 		for (let obj of this.objList) {
 			await obj.loadMesh(this.gl);
 		}
-	}
+	}*/
 
 	async set2DMenu(numCardsGathered) {
 		this.ctx.canvas.width = this.gl.canvas.width * 20 / 100;
@@ -112,9 +113,6 @@ export class SceneHandler {
 			this.gl.enable(this.gl.BLEND);
 		this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 	
-		
-
-
 		this.camera.moveCamera();
 		
 		this.objList.forEach( obj => {

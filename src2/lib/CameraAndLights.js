@@ -228,7 +228,6 @@ export class Camera {
 	}
 
 	resetCamera() {
-		if (debug == true) console.log("Reset camera");
 		this.movement.dragging = false;
 		this.movement.angle.xy = this.defaultAngle.xy;
 		this.movement.angle.xz = this.defaultAngle.xz;

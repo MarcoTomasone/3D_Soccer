@@ -1,25 +1,25 @@
 export class Ball {
+    
     constructor(canvas, cardsMarkerPositionList, removeObject) {
         this.canvas = canvas;
         this.position =     {x : 0, y : 0, z : 0  }; // x, y, z 
         this.rotation =    {x : 0, y : 0, z : 0  }; // x, y, z
-        this.facing = 1;
-        this.acceleration = {x : 0, y : 0, z : 0  }; //x, y, z
         this.speed =        {x : 0, y : 0, z : 0  }; //x, y, z
-        this.steering = 0;
+
         //The friction value is a value in the range [0,1]. The friction controls the percentage of speed preserved 
         //Smaller value results in bigger friction, larger value results in smaller friction
         this.frictionX = 0.70;   
         this.frictionY = 0.70; 
-        this.frictionZ = 0.5; 
-        this.cardsGathered = 0;
-        this.maxSpeed = 0.35;
+        this.frictionZ = 0.5; //Not important 
+        this.maxSpeed = 0.5;
         this.maxAcceleration  = 0.07;
+        //Number of cards gathered and list of objects positions
+        this.cardsGathered = 0;
         this.cardsMarkerPositionList = cardsMarkerPositionList;
 
         //Dict to track which key is being pressed
         this.keyPressed = { w: false, a: false, s: false, d: false}
-        
+        //Function binded whit the SceneHandler environment to eliminate the object from the scene
         this.removeObject = removeObject;
     }
 
@@ -29,16 +29,16 @@ export class Ball {
         //Speed in ball space
         var ballSpeed = {x : 0, y : 0, z : 0}; //x, y, z
         //From speed world frame to speed car frame
-        var cosf = Math.cos(this.facing*Math.PI/180.0);
-        var sinf = Math.sin(this.facing*Math.PI/180.0);
-        ballSpeed.x = +cosf*this.speed.x - sinf*this.speed.z;
-        ballSpeed.y = this.speed.y;
-        ballSpeed.z = +sinf*this.speed.x + cosf*this.speed.z;
+        var cosf = Math.cos(Math.PI/180.0);
+        var sinf = Math.sin(Math.PI/180.0);
+        ballSpeed.x = +cosf*this.speed.x - sinf*this.speed.y;
+        //ballSpeed.y = this.speed.y;
+        ballSpeed.y = +sinf*this.speed.x + cosf*this.speed.y;
         
         if(this.keyPressed.w ) {
             if( ballSpeed.x + this.maxAcceleration <= this.maxSpeed)
                 ballSpeed.x += this.maxAcceleration;
-            this.rotation.x = 0;
+            this.rotation.x = 0; //Reset rotation otherwise the ball rotates badly
         }
         if(this.keyPressed.s ){ 
             if( ballSpeed.x - this.maxAcceleration >= -this.maxSpeed)
@@ -57,27 +57,24 @@ export class Ball {
         //Friction handling
         ballSpeed.x *= this.frictionX;
         ballSpeed.y *= this.frictionY;
-        ballSpeed.z *= this.frictionZ;
         
         //Back to speed coordinate world
-        this.speed.x = +cosf*ballSpeed.x + sinf*ballSpeed.z;
-        this.speed.y = ballSpeed.y;
-        this.speed.z = -sinf*ballSpeed.x + cosf*ballSpeed.z;
+        this.speed.x = +cosf*ballSpeed.x + sinf*ballSpeed.y;
+        this.speed.y = -sinf*ballSpeed.x + cosf*ballSpeed.y;
         
         
         this.collisionCheckerUpdate(this.speed.x, this.speed.y)
         
+        //Rotation handling
         if(this.speed.x != 0)
-            this.rotation.y += this.speed.x ;
+            this.rotation.y += this.speed.x;
         else 
             this.rotation.y = 0;
+
         if(this.speed.y != 0)
             this.rotation.x += -this.speed.y ;
         else 
             this.rotation.x = 0;    
-        
-        
-        //console.log(this.position);
     }
 
 

@@ -1,4 +1,4 @@
-export class MeshLoader {
+export class ObjLoader {
 
 	static parseOBJ(text) {
 		// Parse the OBJ file removing comments and empty lines
@@ -259,7 +259,7 @@ export class MeshLoader {
 
 		const isPowerOf2 = (value) => (value & (value - 1)) === 0;
 
-		const texture = MeshLoader.create1PixelTexture(gl, [128, 192, 255, 255]);
+		const texture = ObjLoader.create1PixelTexture(gl, [128, 192, 255, 255]);
 		// Asynchronously load an image
 		const image = new Image();
 		image.src = url;
