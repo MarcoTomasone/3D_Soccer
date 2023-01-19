@@ -82,7 +82,9 @@ export class Camera {
 			document.getElementById("xLight").value = 0;
 			document.getElementById("yLight").value = 100;
 			document.getElementById("zLight").value = 350;
-			this.lightDirection = [0, 100, 350]; 
+			this.setLight("x", 0);
+			this.setLight("y", 100);
+			this.setLight("z", 350);
 		}.bind(this);
 	}
 
@@ -202,6 +204,7 @@ export class Camera {
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
 		
 		return {
+			//u_lightDirection: m4.normalize([this.lightPosition.x, this.lightPosition.y, this.lightPosition.z]),
 			u_lightDirection: m4.normalize([-1,3,5]),
 			u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
 			u_lightIntensity: this.lightIntensity,
@@ -209,7 +212,6 @@ export class Camera {
 			u_projection: projection,
 			u_textureMatrix: textureMatrix,
 			u_viewWorldPosition: this.position,
-			u_shadowIntensity: this.shadowIntensity,
 		}
 	};
 
@@ -269,7 +271,6 @@ export class Camera {
 		
 		if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 			canvas.addEventListener("mousedown", function (event) {
-				if (debug == true) console.log("mousedown");
 				camera.movement.old = {
 					x: event.pageX,
 					y: event.pageY
@@ -278,14 +279,12 @@ export class Camera {
 			});
 			
 			canvas.addEventListener("mouseup", function (event) {
-				if (debug == true) console.log("mouseup");
 				camera.moveCamera();
 				camera.movement.dragging = false;
 			});
 
 			canvas.addEventListener("mousemove", function (event) {
 				if (!camera.movement.dragging) return;
-				if (debug == true) console.log("mousemove", camera.movement);
 
 				// Compute drag delta
 				let deltaY = (-(event.pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
@@ -312,7 +311,6 @@ export class Camera {
 		} else {
 			
 			canvas.addEventListener("touchstart", function (event) {	
-				if (debug == true) console.log("mousedown");
 				camera.movement.old = {
 					x: event.touches[0].pageX,
 					y: event.touches[0].pageY
@@ -325,7 +323,6 @@ export class Camera {
 			 */
 
 			canvas.addEventListener("touchend", function (event) {
-				if (debug == true) console.log("mouseup");
 				camera.moveCamera();
 				camera.movement.dragging = false;
 			});
@@ -336,8 +333,6 @@ export class Camera {
 
 			canvas.addEventListener("touchmove", function (event) {
 				if (!camera.movement.dragging) return;
-
-				if (debug == true) console.log("mousemove", camera.movement);
 
 				// Compute drag delta
 				let deltaX = (-(event.touches[0].pageX - camera.movement.old.x) * 2 * Math.PI) / canvas.width;

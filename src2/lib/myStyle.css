@@ -2,10 +2,12 @@ body {
   background: #dddddd;
 }
 #screenCanvas {
-
+  position: relative;
   z-index: 1;
   background: #ffffff;
   border: thin inset #aaaaaa;
+  width: 100%;
+  height: 100%;
 
 }
 
@@ -80,6 +82,8 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+
 #uiContainer{
 position: absolute;
 top: 10px;
@@ -94,8 +98,11 @@ background-color: rgba(220, 212, 212, 0.201);
 
 }
 .container {  /*to manage text on canvas and webgl */
-position: relative;
+  position: relative;
+  width: 75%;
+  height: 60%;
 }
+
 #visuale{
 color: darkblue;
 
@@ -107,11 +114,13 @@ padding-top: 10px;
 padding-left: 10px;
 }
 
-#upperCanvas {  /*to manage text on canvas and webgl */
-  background-color: transparent;  /* needed because we setcanvas bg color to white */
+#upperCanvas {  
+  background-color: rgba(220, 212, 212, 0.801);  /* needed because we setcanvas bg color to white */
   position: absolute;
-  z-index: 1;
-  left: 0px;
+  z-index: 2;
+  margin : 4px;
+  border-radius: 10px;
+  right: 0px;
   top: 0px;
   font-smooth: never;
   -webkit-font-smoothing : none;

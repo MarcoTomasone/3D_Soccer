@@ -1,5 +1,5 @@
-import {Environment} from "./lib/Environment.js";
 import {ObjectRenderer} from "./lib/ObjectRenderer.js";
+import { SceneHandler } from "./lib/SceneHandler.js";
 function getRndInteger(min, max) {
 	var num =  Math.floor(Math.random() * (max - min + 1) ) + min;
 	return (num > -1 && num < 1) ? getRndInteger(min, max) : num;
@@ -32,18 +32,18 @@ async function main() {
 			positionList.push({name: "markerCone", x: randomX, y: randomY, z: 0.5, visibility: false});
 		}	
 	}
-	const env = new Environment("#screenCanvas", positionList);
+	const scene = new SceneHandler("#screenCanvas", positionList);
 	const canvas = document.getElementById("screenCanvas");
 	//TODO: far si che le posizioni di spawn siano dentro il campo solo
-	await env.addObject(new ObjectRenderer("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
-	await env.addObject(new ObjectRenderer("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
-	await env.addObject(new ObjectRenderer("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
-	await env.addObject(new ObjectRenderer("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
-	await env.addObject(new ObjectRenderer("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
+	await scene.addObject(new ObjectRenderer("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
+	await scene.addObject(new ObjectRenderer("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
+	await scene.addObject(new ObjectRenderer("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
+	await scene.addObject(new ObjectRenderer("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
+	await scene.addObject(new ObjectRenderer("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
 		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
-		await env.addObject(new ObjectRenderer(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
+		await scene.addObject(new ObjectRenderer(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
 
 	
@@ -53,13 +53,16 @@ async function main() {
 	
 	
 	function render(time) {
+		if(!toStop){	
 			time *= 0.001;  // convert to seconds
 			
-			env.render(time);
+			scene.render(time);
 		
 			requestAnimationFrame(render);
 		//TODO: else cancel requestAnimationFrame
-
+		}
+		else 
+			cancelAnimationFrame(render);
 	}
 	
 	

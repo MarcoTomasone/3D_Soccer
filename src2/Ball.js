@@ -120,12 +120,17 @@ export class Ball {
                         element.visibility = true;
 
             } else if (element.visibility == true && element.name == "markerCone" &&
-                this.position.x <= element.x + 0.7  && 
+                    this.position.x <= element.x + 0.7  && 
                     this.position.x >= element.x -0.7  &&
-                        this.position.y <= element.y + 0.7 &&
-                            this.position.y >= element.y -0.7){   
+                    this.position.y <= element.y + 0.7 &&
+                    this.position.y >= element.y -0.7){   
+                                toStop = true;           
                                 const upperCanvas = document.getElementById("upperCanvas");
                                 const ctx = upperCanvas.getContext("2d");
+                                ctx.canvas.width = this.canvas.clientWidth;
+                                ctx.canvas.height = this.canvas.clientHeight;
+                                ctx.canvas.style.margin = 0 + "px";
+                                ctx.canvas.style.borderRadius = 0 + "px";
                                 const game_over = new Image();
                                 game_over.src = "./resources/gameOver.png";
                                 await game_over.decode();
@@ -133,13 +138,12 @@ export class Ball {
                                 ctx.drawImage(game_over, 0, 0, upperCanvas.clientWidth, upperCanvas.clientHeight);     
                                 ctx.font = '60pt VT323, sans-serif';
                                 ctx.fillStyle = 'white';
-                                ctx.fillText("You have to improve yor dribbling!", 100,50);
+                                ctx.fillText("You have to improve your dribbling!", 100,50);
                                 ctx.font = '40pt VT323, sans-serif';
                                 ctx.fillText("Click to play again", 430,100);
                                 upperCanvas.addEventListener('click', function() {
                                     location.reload();
                                 });
-                                toStop = true;           
             }        
         }
     }
@@ -149,49 +153,49 @@ export class Ball {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             var Joy1 = new JoyStick('joystick-div', {}, function(stickData) {
                 switch(stickData.cardinalDirection) {
-                case "S":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.s = true;
-                    break;
-                case "N":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.w = true;
-                    break;
-                case "E":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.d = true;
-                    break;
-                case "W":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.a = true;
-                    break;
-                case "NE":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.w = true;
-                    ball.keyPressed.d = true;
-                    break;
-                case "NW":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.w = true;
-                    ball.keyPressed.a = true;
-                    break;
-                case "SE":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.s = true;
-                    ball.keyPressed.d = true;
-                    break;
-                case "SW":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    ball.keyPressed.s = true;
-                    ball.keyPressed.a = true;
-                    break;
-                case "C":
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    break;
-                default:
-                    ball.keyPressed = {w: false, s: false, a: false, d: false};
-                    break;
-            }
+                    case "S":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.s = true;
+                        break;
+                    case "N":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.w = true;
+                        break;
+                    case "E":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.d = true;
+                        break;
+                    case "W":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.a = true;
+                        break;
+                    case "NE":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.w = true;
+                        ball.keyPressed.d = true;
+                        break;
+                    case "NW":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.w = true;
+                        ball.keyPressed.a = true;
+                        break;
+                    case "SE":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.s = true;
+                        ball.keyPressed.d = true;
+                        break;
+                    case "SW":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        ball.keyPressed.s = true;
+                        ball.keyPressed.a = true;
+                        break;
+                    case "C":
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        break;
+                    default:
+                        ball.keyPressed = {w: false, s: false, a: false, d: false};
+                        break;
+                }
             });  
         }
         else{
