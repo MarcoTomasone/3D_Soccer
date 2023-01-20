@@ -1,3 +1,6 @@
+// Created starting from
+// https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj.html
+//In .obj file line startings with v are positions, lines that start with vt are texture coordinates, and lines that start with vn are normals.
 export class ObjLoader {
 
 	static parseOBJ(text) {
@@ -27,10 +30,11 @@ export class ObjLoader {
 			[],   // colors
 		];
 
-		// Neede to parse mtl
+		// Needed to parse mtl
 		// Since each geometry must be parsed independently in order to apply right mtl, we split the object in an array of geometries
-		const materialLibs = [];
+		// For example if we use a car we want windows to be transparent and the bumper to be reflective
 		const geometries = [];
+		const materialLibs = [];
 		let geometry;
 		let groups = ['default']; // g keyword
 		let material = 'default';
@@ -103,7 +107,8 @@ export class ObjLoader {
 		// o: object name
 		// s: smooth shading (0 or 1)
 		const keywords = {
-			v(parts) {// Convert the string to a float and add it to the positions array
+			v(parts) {
+				// Convert the string to a float and add it to the positions array
 				// if there are more than 3 values here they are vertex colors
 				if (parts.length > 3) {
 					objPositions.push(parts.slice(0, 3).map(parseFloat));
@@ -127,7 +132,7 @@ export class ObjLoader {
 					addVertex(parts[tri + 2]);
 				}
 			},
-			s: noop,    // smoothing group, TODO: Sicuro di poterlo ignorare?
+			s: noop,    // smoothing group, 
 			mtllib(parts, unparsedArgs) {
 				// the spec says there can be multiple filenames here
 				// but many exist with spaces in a single filename
@@ -140,14 +145,16 @@ export class ObjLoader {
 			g(parts) {
 				groups = parts;
 				newGeometry();
-			}, // TODO: In verità non me ne faccio niente quindi potrebbe essere una noop?
+			},
+			
+			/*
 			o(parts, unparsedArgs) {
 				object = unparsedArgs;
 				newGeometry();
-			},
+			},*/
 		};
 
-		const keywordRE = /(\w*)(?: )*(.*)/; // Match a keyword at the start of a line followed by a list of arguments regexr.com/70n6l
+		const keywordRE = /(\w*)(?: )*(.*)/;
 		const lines = text.split('\n'); // Split the text into lines using \n
 
 		for (let lineNo = 0; lineNo < lines.length; ++lineNo) { // Loop through all the lines
@@ -163,7 +170,7 @@ export class ObjLoader {
 			}
 
 			const [, keyword, unparsedArgs] = m;
-			const parts = line.split(/\s+/).slice(1); // Split the line using whitespaces and ignore the first element (the keyword) FIXME: Non ho capito perchè visto che ottiene lo stesso di keywordRE.exec(line)
+			const parts = line.split(/\s+/).slice(1); //Split line by whitespaces ignoring  first element (v/vt/vn) 
 			const handler = keywords[keyword]; // Look up the keyword in the keywords object and call the corresponding function
 
 			if (!handler) { // If the keyword does not match any function, log a warning and continue
@@ -174,18 +181,20 @@ export class ObjLoader {
 			handler(parts, unparsedArgs); // Call the function with the arguments
 		}
 
-		// remove any arrays that have no entries.
+		// remove any arrays that have no entries 
+		//Case where texcoords or normals are missing and just not include them
 		for (const geometry of geometries) {
 			geometry.data = Object.fromEntries(
 				Object.entries(geometry.data).filter(([, array]) => array.length > 0));
 		}
 
 		return {
-			geometries,
+			geometries, // Array of objects containing name and data
 			materialLibs,
 		};
 	}
 
+	// Created starting from https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html
 	static parseMTL(text) {
 		// Same logic as parseOBJ
 		const materials = {};

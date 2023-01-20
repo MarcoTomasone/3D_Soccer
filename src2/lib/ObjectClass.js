@@ -1,6 +1,8 @@
 import { ObjLoader } from "./ObjLoader.js";
 
-
+// Created starting from
+// https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj.html
+// https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html
 export class ObjectClass {
 	
 	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, visibility, mtlPath = null) {
@@ -41,10 +43,10 @@ export class ObjectClass {
 
 
 		const textures = {
-			defaultWhite: ObjLoader.create1PixelTexture(gl, [255, 255, 255, 255]),
+			defaultWhite: ObjLoader.create1PixelTexture(gl, [255, 255, 255, 255]), //Nedeed for materials without textures
 			defaultNormal: ObjLoader.create1PixelTexture(gl, [127, 127, 255, 0]),
 		};
-
+		//defaults for any material parameters that are missing
 		const defaultMaterial = {
 			diffuse: [1, 1, 1],
 			diffuseMap: textures.defaultWhite,
@@ -56,7 +58,8 @@ export class ObjectClass {
 			opacity: 1,
 		};
 
-		// load texture for materials
+		// Load texture for materials
+		//Each texture is an object with a name and so different obj files can share the same texture
 		for (const material of Object.values(materials)) {
 			Object.entries(material)
 				.filter(([key]) => key.endsWith('Map'))
@@ -82,7 +85,7 @@ export class ObjectClass {
 			//
 			// and because those names match the attributes in our vertex
 			// shader we can pass it directly into `createBufferInfoFromArrays`
-			// from the article "less code more fun".
+			// from the article "less code more fun" https://webgl2fundamentals.org/webgl/lessons/webgl-less-code-more-fun.html
 
 			if (data.color) {
 				if (data.position.length === data.color.length) {
@@ -114,6 +117,7 @@ export class ObjectClass {
 
 			// create a buffer for each array by calling
 			// gl.createBuffer, gl.bindBuffer, gl.bufferData
+			//... spread operator: shows all the properties of the object
 			const bufferInfo = webglUtils.createBufferInfoFromArrays(gl, data);
 			return {
 				material: {
@@ -172,8 +176,4 @@ export class ObjectClass {
 		}
 	}
 
-}
-
-function degToRad(d) {
-	return d * Math.PI / 180;
 }

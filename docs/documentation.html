@@ -25,15 +25,20 @@
 
 <h3>Obj Loader</h3>
 <p>
-ObjLoader è una classe fortemente basata su dei tutorial di WebGLFoundamentals. 
-https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj.html
-https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html
-Questa classe si occupa principalmente di fare il parsing dei file.obj e .mtl che rappresentano gli oggetti del gioco. 
+ObjLoader è una classe fortemente basata su due tutorial di WebGLFoundamentals:
+<ul>
+    <li> <a href="https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj.html">Caricamento di un file .obj</a></li>
+    <li> <a href="https://webgl2fundamentals.org/webgl/lessons/webgl-load-obj-w-mtl.html">Caricamento di un file .mtl</a> </li>
+</ul>
+Questa classe si occupa principalmente di fare, come prevedibile, il parsing dei file.obj e .mtl che rappresentano gli oggetti del gioco. 
+Ha due metodi principali che sono proprio ParseOBJ e ParseMTL, scritti seguendo i due tutorial sopra elencati. Queste due funzioni parseranno i file (letti nella classe Object Class) e permetteranno di estrarre le informazioni necessarie. ParseOBJ ritorna una lista di geometries e una lista di materialLibs  (geometrie della quale è composto un oggetto e relativi materiali). ParseMTL invece ritorna una lista di materiali.
 </p>
 
 <h3>Object Class</h3>
 Ogni oggetto è un'istanza di questa classe Object Class, che possiede per ogni oggetto una serie di attributi come la posizione, la rotazione e la visibilità. La visibilità di un oggetto serve per scegliere se renderizzare o meno l'oggetto.
 Anche questa classe è ispirata ai tutorial di WebGLFoundamentals elencati in ObjLoader.
+Il costruttore di questa classe prende in input il path del file .obj e richiamando le funzioni della classe ObjLoader, ottiene tutto ciò che le serve per gestire una mesh.
+Questa classe inoltre si occupa di renderizzare ogni singola mesh .Per farlo, infatti lo Scene Handler ha la lista di tutti gli .obj e richiama nel suo metodo render, il render per ogni singola mesh.
 
 <h3>Camera And Lights</h3>
 La classe Camera si occupa di gestire la camera e le luci del gioco. 
@@ -49,7 +54,7 @@ Lo zoom della camera è gestito tramite uno slider che aumenta o diminuisce il F
 <h3>Ball</h3>
 <p>La classe Ball si occupa di gestire i movimenti e le collisioni della palla. Il funzionamento di questa classe è ispirato al codice car.js proposto dal Prof. Casciola.
 Prima di tutto vengono settati dei listener per i movimenti della palla stessa, questi listener sono collegati ai tasti WASD altrimenti è previsto il movimento touch tramite un joystick nel caso in cui si stia utilizzando la versione mobile del gioco. 
-La libreria del joystick non è stata scritta da me, ma è stata utilizzata una libreria già pronta fornita da: https://github.com/bobboteck/JoyStick, alla quale ho modificato i colori. Per permettere movimenti in diagonale è prevista una keymap che associa ad ogni tasto una direzione e in base ai valori booleani della keymap si sceglie se dare o meno velocità alla palla in quella direzione. La palla ha tre vettori principali che ne determinano i comportamenti:
+La libreria del joystick non è stata scritta da me, ma è stata utilizzata una libreria già pronta trovata in rete, sul profilo GitHub di  <a href=https://github.com/bobboteck/JoyStick>bobboteck</a>, alla quale ho modificato i colori. Per permettere movimenti in diagonale è prevista una keymap che associa ad ogni tasto una direzione e in base ai valori booleani della keymap si sceglie se dare o meno velocità alla palla in quella direzione. La palla ha tre vettori principali che ne determinano i comportamenti:
 <ul>
     <li>Position: la posizione della palla</li>
     <li>Speed: la velocità della palla su quell'asse</li>

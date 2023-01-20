@@ -61,68 +61,63 @@
 <script>
 	var toStop = false;
 	const vs = `
-	attribute vec4 a_position;
-	attribute vec2 a_texcoord;
-	attribute vec3 a_normal;
-	attribute vec3 a_tangent;
-	attribute vec4 a_color;
+	attribute vec4 a_position; //In obj
+	attribute vec2 a_texcoord; 		//In obj
+	attribute vec3 a_normal; //In obj
+	attribute vec4 a_color; //In obj
   
-	uniform mat4 u_projection;
-	uniform mat4 u_view;
-	uniform mat4 u_world;
-	uniform mat4 u_textureMatrix;
+	uniform mat4 u_projection; //In obj
+	uniform mat4 u_view;      //In obj
+	uniform mat4 u_world;    //In obj
 	uniform vec3 u_lightPosition;
-	uniform vec3 u_viewWorldPosition;
+	uniform vec3 u_viewWorldPosition; //In obj
 	uniform vec3 u_lightWorldPosition;
   
-	varying vec2 v_texcoord;
+	varying vec2 v_texcoord;        //In obj
 	varying vec4 v_projectedTexcoord;
-	varying vec3 v_normal;
-	varying vec3 v_tangent;
-	varying vec3 v_surfaceToView;
+	varying vec3 v_normal;	//In obj
+	varying vec3 v_surfaceToView; //In obj
 	varying vec3 v_surfaceToLight;
-	varying vec4 v_color;
+	varying vec4 v_color; //In obj 
   
 	void main() {
 
-	  vec4 worldPosition = u_world * a_position;
-	  gl_Position = u_projection * u_view * worldPosition;
-	  v_texcoord = a_texcoord;
-	  v_projectedTexcoord = u_textureMatrix * worldPosition;
-	  v_normal = mat3(u_world) * a_normal;
-	  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz;
+	  vec4 worldPosition = u_world * a_position; //In obj
+	  gl_Position = u_projection * u_view * worldPosition; //In obj
+	  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz; //In obj
+	  v_texcoord = a_texcoord; //In obj
+	  v_normal = mat3(u_world) * a_normal;  //In obj
 	  // compute the world position of the surface
 	  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
 	  v_surfaceToLight = u_lightPosition - surfaceWorldPosition;
 	  mat3 normalMat = mat3(u_world);
-	  v_tangent = normalize(normalMat * a_tangent);
-	  v_color = a_color;
+	  v_color = a_color; 		//In obj
 	}
 	`;
 
 	const fs = `
 	precision highp float;
 
-	varying vec2 v_texcoord;
-	varying vec3 v_normal;
-	varying vec3 v_tangent;
-	varying vec3 v_surfaceToView;
-	varying vec4 v_color;
+	varying vec2 v_texcoord;		//In obj
+	varying vec3 v_normal;  			//In obj
+	varying vec3 v_surfaceToView; 		//In obj
+	varying vec4 v_color;				 //In obj
 	varying vec3 v_surfaceToLight;
 	varying vec4 v_projectedTexcoord;
 	
-	uniform vec3 diffuse;
-	uniform vec3 ambient;
-	uniform vec3 emissive;
-	uniform vec3 specular;
-	uniform vec3 u_lightDirection;
-	uniform vec3 u_ambientLight;
+	uniform vec3 diffuse;    			  //In obj	
+	uniform vec3 ambient;				  //In obj
+	uniform vec3 emissive;				  //In obj
+	uniform vec3 specular;				  //In obj
+	uniform vec3 u_lightDirection; 		  //In obj
+	uniform vec3 u_ambientLight;          //In obj
 	uniform vec3 u_reverseLightDirection;
 	uniform vec4 u_colorMult;
+	uniform vec4 u_diffuse;  				//In obj
 
 	uniform sampler2D u_texture;
 	uniform sampler2D u_projectedTexture;
-	uniform sampler2D diffuseMap;
+	uniform sampler2D diffuseMap;	//In obj
 	uniform sampler2D specularMap;
 	uniform sampler2D normalMap;
 
@@ -131,34 +126,29 @@
 	uniform float u_bias;
 	uniform float u_lightIntensity;
 	uniform float u_shadowIntensity;
-  
+	
 	void main () {
-	  vec3 normal = normalize(v_normal);
-	  vec3 tangent = normalize(v_tangent) * ( float( gl_FrontFacing ) * 2.0 - 1.0 );
-	  vec3 bitangent = normalize(cross(normal, tangent));
-  
-	  mat3 tbn = mat3(tangent, bitangent, normal);
+	  vec3 normal = normalize(v_normal); //In obj
 	  normal = texture2D(normalMap, v_texcoord).rgb * 2. - 1.;
-	  normal = normalize(tbn * normal);
   
-	  vec3 surfaceToViewDirection = normalize(v_surfaceToView);
-	  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);
+	  vec3 surfaceToViewDirection = normalize(v_surfaceToView);          		//In obj
+	  vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);   //In obj
       vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 	  float light = dot(v_normal, u_reverseLightDirection);
 	  vec3 projectedTexcoord = v_projectedTexcoord.xyz / v_projectedTexcoord.w;
 	  float currentDepth = projectedTexcoord.z + u_bias;
-	  //float fakeLight = dot(u_lightDirection, normal) * .5 + .5;
-	  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);
+	  float fakeLight = dot(u_lightDirection, normal) * .5 + .5;  //In obj
+	  float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);  				//In obj
 	  vec4 specularMapColor = texture2D(specularMap, v_texcoord);
 	  vec3 effectiveSpecular = specular * specularMapColor.rgb;
   
-	  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);
-	  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;
-	  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;
+	  vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);				//In obj
+	  vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;   //In obj
+	  float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;   	//In obj
 
 	  float projectedDepth = texture2D(u_projectedTexture, projectedTexcoord.xy).r;
 	  vec4 texColor = texture2D(u_texture, v_texcoord) * u_colorMult;
-
+	  
 	  gl_FragColor = vec4(
 		  emissive +
 		  ambient * u_ambientLight +
