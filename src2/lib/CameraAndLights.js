@@ -195,9 +195,10 @@ export class Camera {
 		// Make a view matrix from the camera matrix.
 		const view = m4.inverse(camera);
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
-		
+
 		return {
 			//u_lightDirection: m4.normalize([this.lightPosition.x, this.lightPosition.y, this.lightPosition.z]),
+			u_lightPosition: [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],
 			u_lightDirection: m4.normalize([-1,3,5]),
 			u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
 			u_lightIntensity: this.lightIntensity,

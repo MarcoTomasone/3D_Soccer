@@ -2,10 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="myStyle.css"></link>
 <title>3D Soccer Documentation</title>
 </head>
+
 <body>  
-<p>
+<h1>3D Soccer</h1>
+<h2>Marco Benito Tomasone 1038815</h2>
+<h2>Documentazione</h2>
+    <p>
    3D soccer è un gioco sviluppato utilizzando Javascript e la libreria WebGL2. L'utente controlla una palla all'interno di uno stadio. 
    All'inzio del gioco la palla si trova al centro dello stadio e nel campo appariranno tre cinesini che "agiranno da avversari" per la palla che
    dovrà raccogliere tre cartellini gialli. Alla loro raccolta appariranno altri cinesini ed un arbitro che inseguirà la palla per espellerla.
@@ -15,6 +20,10 @@
         <li>Se l'arbitro tocca la palla</li>
     </ul>
 </p>
+<h3>Oggetti</h3>
+Tutti gli oggetti sono stati creati o ritoccati utilizzando il software Blender. Escludendo gli spalti dello stadio, tutti gli oggetti sono stati creati da zero. Per quanto riguarda i .obj degli spalti sono stati trovati in rete. Essi però avevano un sistema di travi posteriore abbastanza complesso, che ho provveduto a eliminare per semplificarne i modelli tramite Blender. 
+
+<h3>Scene Handler</h3>
 <p>
     Lo Scene Handler è la classe che si occupa di fare e gestire il setup del gioco. 
     Prima di tutto, questa classe trovera i due canvas e inizializzerà su uno il contesto WebGL2 e sull'altro un contesto 2D (che verrà usato per il menù delle istruzioni). 
@@ -41,7 +50,7 @@ Il costruttore di questa classe prende in input il path del file .obj e richiama
 Questa classe inoltre si occupa di renderizzare ogni singola mesh .Per farlo, infatti lo Scene Handler ha la lista di tutti gli .obj e richiama nel suo metodo render, il render per ogni singola mesh.
 
 <h3>Camera And Lights</h3>
-La classe Camera si occupa di gestire la camera e le luci del gioco. 
+La classe Camera And Lights si occupa di gestire la camera e le luci del gioco. 
 La camera è inizialmente posta su una semisfera che si trova attorno allo stadio e tramite gli opportuni listener permette all'utente di muovere la camera. Inizialmente il target della camera sarà il centro (0,0,0) e la camera si muoverà attorno a questo punto. Si prevede però la possibilità di far si che la camera punti non più il centro, ma punti la palla e quindi la camera aggiornerà la sua inclinazione rispetto ai movimenti della palla. Sono state previste inoltre due camere particolari:
 
 <ul>
@@ -49,8 +58,8 @@ La camera è inizialmente posta su una semisfera che si trova attorno allo stadi
     <li>Camera dall'alto: la camera si trova sopra la palla e punta verso di essa</li>
 </ul>
 In entrambe queste camere la posizione non è più modificabile dall'utente tramite gli input da mouse e touch ma sarà fissata rispetto alla posizione della palla.
-Lo zoom della camera è gestito tramite uno slider che aumenta o diminuisce il FOV (campo visivo) della camera, questo fa si che la camera si avvicini o si allontani dal target della palla stesso. 
-
+Lo zoom della camera è gestito tramite uno slider che aumenta o diminuisce il FOV (campo visivo) della camera, questo fa si che la camera si avvicini o si allontani dal target della palla stesso. <br>
+La gestione delle luci invece 
 <h3>Ball</h3>
 <p>La classe Ball si occupa di gestire i movimenti e le collisioni della palla. Il funzionamento di questa classe è ispirato al codice car.js proposto dal Prof. Casciola.
 Prima di tutto vengono settati dei listener per i movimenti della palla stessa, questi listener sono collegati ai tasti WASD altrimenti è previsto il movimento touch tramite un joystick nel caso in cui si stia utilizzando la versione mobile del gioco. 

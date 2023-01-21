@@ -36,9 +36,9 @@ async function main() {
 	const canvas = document.getElementById("screenCanvas");
 	//TODO: far si che le posizioni di spawn siano dentro il campo solo
 	await scene.addObject(new ObjectClass("plane", './resources/Plane.obj', {x: 0, y: 0, z: 0}, true));
-	await scene.addObject(new ObjectClass("ball", './resources/ball.obj', {x: 0, y: 0, z: 0.7}, true));
+	await scene.addObject(new ObjectClass("ball", './resources/Ball.obj', {x: 0, y: 0, z: 0.7}, true));
 	await scene.addObject(new ObjectClass("refree", './resources/Refree.obj', {x: 0, y: 0, z: 1}, false));
-	await scene.addObject(new ObjectClass("scene", './resources/scena2.obj', {x: 0, y: 0, z: 0}, true));
+	await scene.addObject(new ObjectClass("scene", './resources/Scena2.obj', {x: 0, y: 0, z: 0}, true));
 	await scene.addObject(new ObjectClass("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
