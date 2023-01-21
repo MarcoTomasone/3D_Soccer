@@ -42,7 +42,7 @@ async function main() {
 	await scene.addObject(new ObjectClass("glass", './resources/Vetro.obj', {x: 19, y: 0, z: 8.5}, true));
 	
 	for (const element of positionList){
-		var nameFile = element.name.startsWith("yellowCard") ? "yellowCard" : element.name;
+		var nameFile = element.name.startsWith("yellowCard") ? "YellowCard" : element.name;
 		await scene.addObject(new ObjectClass(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
 		
