@@ -1,5 +1,6 @@
 body {
   background: #dddddd;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 #screenCanvas {
   position: relative;
@@ -97,22 +98,12 @@ font-size: 16px;
 background-color: rgba(220, 212, 212, 0.201);
 
 }
-.container {  /*to manage text on canvas and webgl */
+.container {  
   position: relative;
   width: 75%;
   height: 60%;
 }
 
-#visuale{
-color: darkblue;
-
-font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-font: Calibri;
-}
-#bottoni{
-padding-top: 10px;
-padding-left: 10px;
-}
 
 #upperCanvas {  
   background-color: rgba(220, 212, 212, 0.801);  /* needed because we setcanvas bg color to white */

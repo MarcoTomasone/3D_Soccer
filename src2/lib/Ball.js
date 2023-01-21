@@ -121,26 +121,14 @@ export class Ball {
                     this.position.x >= element.x -0.7  &&
                     this.position.y <= element.y + 0.7 &&
                     this.position.y >= element.y -0.7){   
-                                toStop = true;           
-                                const upperCanvas = document.getElementById("upperCanvas");
-                                const ctx = upperCanvas.getContext("2d");
-                                ctx.canvas.width = this.canvas.clientWidth;
-                                ctx.canvas.height = this.canvas.clientHeight;
-                                ctx.canvas.style.margin = 0 + "px";
-                                ctx.canvas.style.borderRadius = 0 + "px";
-                                const game_over = new Image();
-                                game_over.src = "./resources/gameOver.png";
-                                await game_over.decode();
-                                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                                ctx.drawImage(game_over, 0, 0, upperCanvas.clientWidth, upperCanvas.clientHeight);     
-                                ctx.font = '60pt VT323, sans-serif';
-                                ctx.fillStyle = 'white';
-                                ctx.fillText("You have to improve your dribbling!", 100,50);
-                                ctx.font = '40pt VT323, sans-serif';
-                                ctx.fillText("Click to play again", 430,100);
-                                upperCanvas.addEventListener('click', function() {
-                                    location.reload();
-                                });
+                                toStop = true;
+                                cone = true;    
+                                console.log("cono")     
+                                console.log(element);
+                                console.log("palla");
+                                console.log(this.position);  
+                                console.log(this.cardsMarkerPositionList)
+                                
             }        
         }
     }

@@ -30,6 +30,8 @@ export class SceneHandler {
 		this.camera = new Camera(this.gl.canvas);
 		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
+		this.timerStarted = false;
+		this.startTime = null;
 
 		//Setting up controls for the camera and the ball
 		Camera.setCameraControls(this.gl.canvas, this.camera);
@@ -73,19 +75,62 @@ export class SceneHandler {
 		this.ctx.font = "20px Arial";
 		//If on mobile 
 		if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-			wrapText(this.ctx, "Use joystick to move the ball", 5, 200, this.ctx.canvas.width, 20);
-			wrapText(this.ctx, "Use touch to move the camera", 5, 250, this.ctx.canvas.width, 20);
+			wrapText(this.ctx, "Use joystick to move the ball", 5, 100, this.ctx.canvas.width, 20);
+			wrapText(this.ctx, "Use touch to move the camera", 5, 150, this.ctx.canvas.width, 20);
+			wrapText(this.ctx, "Collect all the yellow cards while avoiding the cones and don't get caught by the referee!", 5, 290, this.ctx.canvas.width, 20);
 		} else {
-			wrapText(this.ctx, "Use WASD to move the ball", 5, 120, this.ctx.canvas.width, 20);
+			wrapText(this.ctx, "Use WASD to move the ball", 5, 70, this.ctx.canvas.width, 20);
 			const wasd = new Image();
 			wasd.src = "./resources/wasd.png";
 			await wasd.decode();
-			this.ctx.drawImage(wasd, 13, 121, this.ctx.canvas.clientWidth-25, 100); 
-			wrapText(this.ctx, "Use mouse to move the camera", 5, 250, this.ctx.canvas.width, 20);
+			this.ctx.drawImage(wasd, 13, 100, this.ctx.canvas.clientWidth-25, 100); 
+			wrapText(this.ctx, "Use mouse to move the camera", 5, 230, this.ctx.canvas.width, 20);
+			wrapText(this.ctx, "Collect all the yellow cards while avoiding the cones and don't get caught by the referee!", 5, 290, this.ctx.canvas.width, 20);
 			//this.ctx.fillText("Use mouse to move the camera", 10,250);
 		}
+	}
 
+	async setEndGame2DMenu(time) {
+		this.ctx.canvas.width = this.gl.canvas.width * 20 / 100;
+		this.ctx.canvas.height = this.gl.canvas.height /2;
+		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+		this.ctx.font = "30px Arial";
+		this.ctx.fontFamily = "Gill Sans, Gill Sans MT, Calibri, Trebuchet MS, sans-serif";
+		wrapText(this.ctx, "RUN AWAY FROM THE REFREE!", 20, 70, this.ctx.canvas.width, 30);
+		if(this.timerStarted){
+			var timeElapsed = new Date().getTime() - this.startTime;
+			var seconds = 60 - Math.floor(timeElapsed / 1000);
+			if(seconds > 0){
+				this.ctx.font = "60px Arial";
+				this.ctx.fillText( seconds, 100, 200);
+			}
+			else {
+				toStop = true;
+				this.ctx.canvas.width = this.gl.canvas.width;
+				this.ctx.canvas.height = this.gl.canvas.height;
+				this.ctx.canvas.style.margin = 0 + "px";
+				this.ctx.canvas.style.borderRadius = 0 + "px";
+				const winning = new Image();
+				winning.src = "./resources/winning.jpg";
+				await winning.decode();
+				this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+				this.ctx.drawImage(winning, 0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight);     
+				this.ctx.font = '60pt VT323, sans-serif';
+				this.ctx.fillStyle = 'white';
+				this.ctx.fillText("YOU ARE A CHAMPION!", this.ctx.canvas.width/2 - 50 ,this.ctx.canvas.height - 100);
+				this.ctx.font = '40pt VT323, sans-serif';
+				this.ctx.fillText("Click to play again", this.ctx.canvas.width/2 - 50,this.ctx.canvas.height - 50);
+				upperCanvas.addEventListener('click', function() {
+					location.reload();
+				});	
+			}
 
+		} else{
+			this.startTime = new Date().getTime();
+			this.timerStarted = true;
+			 }
+				
+	
 	}
 
 
@@ -159,6 +204,7 @@ export class SceneHandler {
 						this.refree.moveRefree(this.ball.getXPosition(), this.ball.getYPosition(), obj.visibility);
 						obj.position.x = this.refree.getXPosition();
 						obj.position.y = this.refree.getYPosition();
+						this.setEndGame2DMenu(time);
 					}
 				}	
 			}			

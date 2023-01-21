@@ -22,9 +22,9 @@ async function main() {
 	positionList.push({name: "yellowCard_1", x: randomX, y: randomY, z: 0.01, visibility: true});
 	positionList.push({name: "yellowCard_2", x: randomX + 3, y: randomY, z: 0.01, visibility: true});
 	positionList.push({name: "yellowCard_3", x: randomX + 6, y: randomY, z: 0.01, visibility: true});
-	positionList.push({name: "markerCone", x: randomX - 1, y: randomY, z: 0.5, visibility: true});
-	positionList.push({name: "markerCone", x: randomX + 2, y: randomY, z: 0.5, visibility: true});
-	positionList.push({name: "markerCone", x: randomX + 5, y: randomY, z: 0.5, visibility: true});
+	//positionList.push({name: "markerCone", x: randomX - 1, y: randomY, z: 0.5, visibility: true});
+	//positionList.push({name: "markerCone", x: randomX + 2, y: randomY, z: 0.5, visibility: true});
+	//positionList.push({name: "markerCone", x: randomX + 5, y: randomY, z: 0.5, visibility: true});
 	for(var i= 0; i < 15; i++){
 		randomX = getRndInteger(-16, 16);
 		randomY = getRndInteger(-8, 8);
@@ -46,7 +46,7 @@ async function main() {
 		await scene.addObject(new ObjectClass(element.name, './resources/' + nameFile + ".obj", {x: element.x, y: element.y, z:element.z}, element.visibility));
 	};
 		
-	function render(time) {
+	async function render(time) {
 		if(!toStop){	
 			time *= 0.001;  // convert to seconds
 		
@@ -54,8 +54,31 @@ async function main() {
 			
 			requestAnimationFrame(render);
 		}
-		else 
+		else {
+			const upperCanvas = document.getElementById("upperCanvas");
+			const ctx = upperCanvas.getContext("2d");
+			ctx.canvas.width = canvas.clientWidth;
+			ctx.canvas.height = canvas.clientHeight;
+			ctx.canvas.style.margin = 0 + "px";
+			ctx.canvas.style.borderRadius = 0 + "px";
+			const game_over = new Image();
+			game_over.src = "./resources/gameOver.png";
+			await game_over.decode();
+			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			ctx.drawImage(game_over, 0, 0, upperCanvas.clientWidth, upperCanvas.clientHeight);     
+			ctx.font = '60pt VT323, sans-serif';
+			ctx.fillStyle = 'white';
+			if(cone)
+				ctx.fillText("You have to improve your dribbling!", 100,50);
+			else 
+				ctx.fillText("The Refree sent you under the shower!", 75,50);
+			ctx.font = '40pt VT323, sans-serif';
+			ctx.fillText("Click to play again", 430,100);
+			upperCanvas.addEventListener('click', function() {
+				location.reload();
+			});
 			cancelAnimationFrame(render);
+		}
 	}
 	
 	

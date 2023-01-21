@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<h2>Soccer 3D</h2>
+	<h1>3D SOCCER</h1>
 	<div class="container">
 		<canvas id="upperCanvas" width="1280" height="720" style ="z-index: 10"></canvas>
 		<canvas id="screenCanvas" width="1280" height="720"  style="background-color: #e6ffff "></canvas>
@@ -60,6 +60,7 @@
 
 <script>
 	var toStop = false;
+	var cone = false;
 	const vs = `
 	attribute vec4 a_position; //In obj
 	attribute vec2 a_texcoord; 		//In obj
