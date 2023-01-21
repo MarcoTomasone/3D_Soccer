@@ -99,13 +99,12 @@ export class SceneHandler {
 		wrapText(this.ctx, "RUN AWAY FROM THE REFREE!", 20, 70, this.ctx.canvas.width, 30);
 		if(this.timerStarted){
 			var timeElapsed = new Date().getTime() - this.startTime;
-			var seconds = 60 - Math.floor(timeElapsed / 1000);
+			var seconds = 10 - Math.floor(timeElapsed / 1000);
 			if(seconds > 0){
 				this.ctx.font = "60px Arial";
 				this.ctx.fillText( seconds, 100, 200);
 			}
 			else {
-				toStop = true;
 				this.ctx.canvas.width = this.gl.canvas.width;
 				this.ctx.canvas.height = this.gl.canvas.height;
 				this.ctx.canvas.style.margin = 0 + "px";
@@ -123,6 +122,8 @@ export class SceneHandler {
 				upperCanvas.addEventListener('click', function() {
 					location.reload();
 				});	
+				toStop = true;
+				win = true;
 			}
 
 		} else{
@@ -144,6 +145,7 @@ export class SceneHandler {
 			}
 		});
 		document.getElementById("cardNumParagraph").innerText = "Yellow cards gathered: " + (3-count) + "/3";
+		console.log(allCardsGathered)
 		return allCardsGathered;
 	}
 
@@ -192,7 +194,7 @@ export class SceneHandler {
 				obj.rotation.z += 0.1;
 			
 			if(this.checkAllCardsGathered()){
-				if(obj.name == "markerCone"){
+				if(obj.name.startsWith("markerCone")){
 					obj.visibility = true;
 				}
 				if(obj.name == "refree"){

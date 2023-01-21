@@ -147,11 +147,10 @@ export class ObjLoader {
 				newGeometry();
 			},
 			
-			/*
-			o(parts, unparsedArgs) {
-				object = unparsedArgs;
-				newGeometry();
-			},*/
+			
+			o :noop,
+			l: noop,
+			
 		};
 
 		const keywordRE = /(\w*)(?: )*(.*)/;
@@ -226,6 +225,7 @@ export class ObjLoader {
 			Ni(parts) { material.opticalDensity = parseFloat(parts[0]); },
 			d(parts) { material.opacity = parseFloat(parts[0]); },
 			illum(parts) { material.illum = parseInt(parts[0]); },
+			map_d() { }
 		};
 
 		const keywordRE = /(\w*)(?: )*(.*)/;
