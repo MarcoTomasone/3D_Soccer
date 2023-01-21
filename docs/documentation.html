@@ -10,19 +10,28 @@
 <h1>3D Soccer</h1>
 <h2>Marco Benito Tomasone 1038815</h2>
 <h2>Documentazione</h2>
-    <p>
-   3D soccer è un gioco sviluppato utilizzando Javascript e la libreria WebGL2. L'utente controlla una palla all'interno di uno stadio. 
-   All'inzio del gioco la palla si trova al centro dello stadio e nel campo appariranno tre cinesini che "agiranno da avversari" per la palla che
-   dovrà raccogliere tre cartellini gialli. Alla loro raccolta appariranno altri cinesini ed un arbitro che inseguirà la palla per espellerla.
+<p> 3D soccer è un gioco sviluppato utilizzando Javascript e la libreria WebGL2. Questo progetto è stato sviluppato come progetto del corso di Computer Graphics dell'Università di Bologna ed è un progetto incentrato sulla grafica 3D.
+   All'inizio del gioco la palla si trova al centro dello stadio e nel campo appariranno tre cinesini che "agiranno da avversari" per la palla che
+   dovrà raccogliere tre cartellini gialli. Alla loro raccolta appariranno altri cinesini ed un arbitro che inseguirà la palla.
    Ci sono due modi di perdere:
     <ul>
         <li>Se la palla tocca un cinesino</li>
         <li>Se l'arbitro tocca la palla</li>
     </ul>
+    Il gioco termina con vittoria se l'utente, dopo aver raccolto i tre cartellini gialli, riesce a scappare per 60 secondi dall'arbitro che lo inseguirà, evitando contestualmente tutti i cinesini nel campo. 
 </p>
 <h3>Oggetti</h3>
-Tutti gli oggetti sono stati creati o ritoccati utilizzando il software Blender. Escludendo gli spalti dello stadio, tutti gli oggetti sono stati creati da zero. Per quanto riguarda i .obj degli spalti sono stati trovati in rete. Essi però avevano un sistema di travi posteriore abbastanza complesso, che ho provveduto a eliminare per semplificarne i modelli tramite Blender. 
+Tutti gli oggetti sono stati creati o ritoccati utilizzando il software Blender. Escludendo gli spalti dello stadio, tutti gli oggetti sono stati creati da zero. Per quanto riguarda i gli spalti, questi sono stati trovati in rete. Essi però avevano un sistema di travi posteriore abbastanza complesso, che ho provveduto a eliminare per semplificarne i modelli tramite Blender. Qui a sinistra si può vedere la foto degli spalti originali e a destra la foto degli spalti modificati. <br> 
+<img src="spaltiBlender.png" alt="Foto Spalti Originali" style="width: 40%; margin-right: 10%; margin-left: 3px;">
+<img src="spaltiFiniti.png" alt="Foto Spalti Modificati"  style="width: 45%;">
+<br>
+Tutti gli altri oggetti sono stati creati da zero su Blender, che è servito non solo a creare le mesh, ma anche ad applicare le texture sugli oggetti. Mostriamo ora una foto dell'intera scena, che vedrà come unico assente l'arbitro:
+<img src="scena.png" alt="Foto Scena" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
 
+
+<h2>File JS</h2>
+<h3>3D_Soccer</h3>
+3D_Soccer.js è il main di questo progetto. Si occupa di inizializzare e setuppare l'intero gioco. Prima di tutto possiede delle funzioni per generare casualmente le posizioni dei vari oggetti. Verrà generata la posizione di un cartellino giallo a partire dal quale si calcoleranno le posizioni di altri due cartellini gialli e tre cinesini, per formare una sorta di percorso ad ostacoli. Successivamente si genereranno le posizioni di altri cinesini, controllando che non si sovrappongano a quelli già presenti. Il main inizializzerà poi uno Scene Handler e gestirà il ciclo di render principale. Infine, nel caso in cui si perda,  si occuperà di gestire il rendering dell'immagine di game over e di setuppare l'handler per  il click del mouse per far ricominciare il gioco. 
 <h3>Scene Handler</h3>
 <p>
     Lo Scene Handler è la classe che si occupa di fare e gestire il setup del gioco. 
@@ -47,7 +56,7 @@ Ha due metodi principali che sono proprio ParseOBJ e ParseMTL, scritti seguendo 
 Ogni oggetto è un'istanza di questa classe Object Class, che possiede per ogni oggetto una serie di attributi come la posizione, la rotazione e la visibilità. La visibilità di un oggetto serve per scegliere se renderizzare o meno l'oggetto.
 Anche questa classe è ispirata ai tutorial di WebGLFoundamentals elencati in ObjLoader.
 Il costruttore di questa classe prende in input il path del file .obj e richiamando le funzioni della classe ObjLoader, ottiene tutto ciò che le serve per gestire una mesh.
-Questa classe inoltre si occupa di renderizzare ogni singola mesh .Per farlo, infatti lo Scene Handler ha la lista di tutti gli .obj e richiama nel suo metodo render, il render per ogni singola mesh.
+Questa classe inoltre si occupa di renderizzare ogni singola mesh. Per farlo, infatti lo Scene Handler ha la lista di tutti gli .obj e richiama nel suo metodo render, il render per ogni singola mesh.
 
 <h3>Camera And Lights</h3>
 La classe Camera And Lights si occupa di gestire la camera e le luci del gioco. 

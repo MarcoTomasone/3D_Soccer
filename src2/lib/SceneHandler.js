@@ -145,7 +145,6 @@ export class SceneHandler {
 			}
 		});
 		document.getElementById("cardNumParagraph").innerText = "Yellow cards gathered: " + (3-count) + "/3";
-		console.log(allCardsGathered)
 		return allCardsGathered;
 	}
 
@@ -190,8 +189,10 @@ export class SceneHandler {
 					this.camera.setCameraPosition({x: obj.position.x - 2, y: obj.position.y, z:obj.position.z + 1});
 			}
 			
-			if(obj.name.startsWith("yellowCard"))
+			if(obj.name.startsWith("yellowCard")){
 				obj.rotation.z += 0.1;
+				obj.rotation.y = 1;
+			}
 			
 			if(this.checkAllCardsGathered()){
 				if(obj.name.startsWith("markerCone")){

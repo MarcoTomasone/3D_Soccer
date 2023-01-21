@@ -114,11 +114,8 @@ export class Ball {
                 this.cardsMarkerPositionList.indexOf(element);
                 this.cardsMarkerPositionList.splice(this.cardsMarkerPositionList.indexOf(element), 1);
                 this.cardsGathered += 1;
-                console.log(this.cardsGathered)
-
                 //If i gathered all the cards, show all the hidden markers
                 if(this.cardsGathered == 3) {
-                    console.log(this.cardsGathered)
                     for(const element of this.cardsMarkerPositionList)
                         element.visibility = true;}
 
@@ -129,11 +126,7 @@ export class Ball {
                     this.position.y >= element.y -0.7){   
                                 toStop = true;
                                 cone = true;    
-                                console.log("cono")     
-                                console.log(element);
-                                console.log("palla");
-                                console.log(this.position);  
-                                console.log(this.cardsMarkerPositionList)
+                             
                                 
             }        
         }

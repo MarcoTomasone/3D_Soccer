@@ -310,8 +310,6 @@ export class Camera {
 				let deltaY = (-(event.touches[0].pageY - camera.movement.old.y) * 2 * Math.PI) / canvas.height;
 
 				// Update camera angle
-				
-				camera.movement.angle.xy = minimizeAngle(camera.movement.angle.xy + deltaX);
 				camera.movement.angle.xz = lockAngle(camera.movement.angle.xz - deltaY, (Math.PI / 2)-0.001);
 				
 				// Save current mouse position

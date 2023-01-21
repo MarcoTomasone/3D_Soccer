@@ -6,7 +6,6 @@ import { ObjLoader } from "./ObjLoader.js";
 export class ObjectClass {
 	
 	constructor(name, filePath, center = { x: 0, y: 0, z: 0 }, visibility, mtlPath = null) {
-		console.log("Generated object renderer for " + name + " from " + filePath + "visibility: " + visibility);
 		this.name = name;
 		this.filePath = filePath;
 		this.position = center;
@@ -17,7 +16,6 @@ export class ObjectClass {
 	}
 
 	async loadMesh(gl) {
-		console.log("Loading mesh " + this.name + " from " + this.filePath + (this.mtlPath ? " with MTL file " + this.mtlPath : ""));
 		// Load OBJ file
 		const objResponse = await fetch(this.filePath);
 		const objText = await objResponse.text();
@@ -35,7 +33,6 @@ export class ObjectClass {
 			}));
 			materials = ObjLoader.parseMTL(matTexts.join('\n'));
 		} else {
-			console.log("Loading manually defined MTL file " + this.mtlPath);
 			const mtlResponse = await fetch(this.mtlPath);
 			const mtlText = await mtlResponse.text();
 			materials = ObjLoader.parseMTL(mtlText);
@@ -127,8 +124,6 @@ export class ObjectClass {
 				bufferInfo,
 			};
 		});
-
-		console.log("Loaded mesh for " + this.name + ". ", this);
 	}
 	
 	render(gl, meshProgramInfo, time, uniforms) {
