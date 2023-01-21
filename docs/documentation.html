@@ -35,7 +35,7 @@ Tutti gli altri oggetti sono stati creati da zero su Blender, che è servito non
 <h3>Scene Handler</h3>
 <p>
     Lo Scene Handler è la classe che si occupa di fare e gestire il setup del gioco. 
-    Prima di tutto, questa classe trovera i due canvas e inizializzerà su uno il contesto WebGL2 e sull'altro un contesto 2D (che verrà usato per il menù delle istruzioni). 
+    Prima di tutto, questa classe trovera i due canvas e inizializzerà su uno il contesto WebGL2 e sull'altro un contesto 2D (che verrà usato per il menù delle istruzioni e per il rendering della fine del gioco). 
     Infine il costruttore si occuperà di compilare gli shaders e inizializzare i vari componenti di cui è composto il gioco (camera, palla e arbitro) e settarne anche i listener per i loro comandi. 
     La funzione render dello scene Handler è quella che si occupa di gestire tutti i movimenti del gioco e di renderizzare i vari componenti. Inantitutto setta la dimensione del canvas alla dimensione del display e abiliterà trasparenze e profondità.
     Muoverà poi la camera che calcolerà la nuova posizione della camera e controllerà tutta la lista degli obj e per ogni oggetto chiamerà la funzione render che si occuperà di renderizzare l'oggetto. Prima di renderizzarlo però, a seconda dell'oggetto applicherà delle trasformazioni differenti. Per palla e arbitro calcolerà la loro nuova posizione, per i cartellini gialli calcolerà una rotazione e nel caso ci siano camere particolari (come la camera posteriore o dall'alto) calcolerà anche la posizione della camera.
@@ -68,7 +68,8 @@ La camera è inizialmente posta su una semisfera che si trova attorno allo stadi
 </ul>
 In entrambe queste camere la posizione non è più modificabile dall'utente tramite gli input da mouse e touch ma sarà fissata rispetto alla posizione della palla.
 Lo zoom della camera è gestito tramite uno slider che aumenta o diminuisce il FOV (campo visivo) della camera, questo fa si che la camera si avvicini o si allontani dal target della palla stesso. <br>
-La gestione delle luci invece 
+La gestione delle luci viene fatta contestualmente alla camera e utilizzo le sharedUniform della camera per passare le informazioni delle luci. La posizione della luce è gestita tramite tre slider che modificheranno il valore della posizione della luce. 
+La luce è una luce : ????????????????????? TODO: completare 
 <h3>Ball</h3>
 <p>La classe Ball si occupa di gestire i movimenti e le collisioni della palla. Il funzionamento di questa classe è ispirato al codice car.js proposto dal Prof. Casciola.
 Prima di tutto vengono settati dei listener per i movimenti della palla stessa, questi listener sono collegati ai tasti WASD altrimenti è previsto il movimento touch tramite un joystick nel caso in cui si stia utilizzando la versione mobile del gioco. 
