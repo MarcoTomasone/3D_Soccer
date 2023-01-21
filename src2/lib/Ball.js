@@ -110,10 +110,10 @@ export class Ball {
                         this.position.y <= element.y + 0.5 &&
                             this.position.y >= element.y -0.5) {
                 this.removeObject(element.name);
+                this.cardsGathered += 1;
                 //remove element from cardsMarkerPositionList
                 this.cardsMarkerPositionList.indexOf(element);
                 this.cardsMarkerPositionList.splice(this.cardsMarkerPositionList.indexOf(element), 1);
-                this.cardsGathered += 1;
                 //If i gathered all the cards, show all the hidden markers
                 if(this.cardsGathered == 3) {
                     for(const element of this.cardsMarkerPositionList)
@@ -125,9 +125,7 @@ export class Ball {
                     this.position.y <= element.y + 0.7 &&
                     this.position.y >= element.y -0.7){   
                                 toStop = true;
-                                cone = true;    
-                             
-                                
+                                cone = true;               
             }        
         }
     }

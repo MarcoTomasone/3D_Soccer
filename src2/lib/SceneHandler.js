@@ -191,7 +191,6 @@ export class SceneHandler {
 			
 			if(obj.name.startsWith("yellowCard")){
 				obj.rotation.z += 0.1;
-				obj.rotation.y = 1;
 			}
 			
 			if(this.checkAllCardsGathered()){
