@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="src2/lib/myStyle.css"></link>
+  <link rel="stylesheet" href="src/lib/myStyle.css"></link>
   <link href="https://fonts.cdnfonts.com/css/press-start-2p" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet'>
   <!--<style> @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); </style>-->
@@ -39,11 +39,11 @@
 				<button id="rearCamera" name="rearCamera" type="button" disabled>Rear Camera</button>
 			</div>
 			<h5> Light </h5>
-			<input type="range" id="xLight" name="xLight" min="0" max="450" value="0">
+			<input type="range" id="xLight" name="xLight" min="-500" max="450" value="0">
 			<label for="xLight">Light X direction</label><br>
-			<input type="range" id="yLight" name="yLight" min="0" max="450" value="100">
+			<input type="range" id="yLight" name="yLight" min="-500" max="450" value="100">
 			<label for="yLight">Light Y direction</label><br>
-			<input type="range" id="zLight" name="zLight" min="0" max="450" value="350">
+			<input type="range" id="zLight" name="zLight" min="-500" max="450" value="350">
 			<label for="zLight">Light Z direction</label><br>
 			<button id="defaultLightButton" name="defaultLight" type="button">Set Default Light</button>
 			<h5> Transparency </h5> 
@@ -63,59 +63,59 @@
 	var cone = false;
 	var win = false;
 	const vs = `
-	attribute vec4 a_position; //In obj
-	attribute vec2 a_texcoord; 		//In obj
-	attribute vec3 a_normal; //In obj
-	attribute vec4 a_color; //In obj
+	attribute vec4 a_position; 
+	attribute vec2 a_texcoord; 		
+	attribute vec3 a_normal; 
+	attribute vec4 a_color; 
   
-	uniform mat4 u_projection; //In obj
-	uniform mat4 u_view;      //In obj
-	uniform mat4 u_world;    //In obj
-	uniform vec3 u_lightPosition;
-	uniform vec3 u_viewWorldPosition; //In obj
+	uniform mat4 u_projection; 
+	uniform mat4 u_view;      
+	uniform mat4 u_world;    
+	uniform vec3 u_lightPosition;  //point lighting
+	uniform vec3 u_viewWorldPosition; 
 	uniform vec3 u_lightWorldPosition;
+	uniform mat4 u_worldInverseTranspose; //point lighting
   
-	varying vec2 v_texcoord;        //In obj
-	varying vec4 v_projectedTexcoord;
-	varying vec3 v_normal;	//In obj
-	varying vec3 v_surfaceToView; //In obj
-	varying vec3 v_surfaceToLight;
-	varying vec4 v_color; //In obj 
+	varying vec2 v_texcoord;        
+	varying vec3 v_normal;	
+	varying vec3 v_surfaceToView; 
+	varying vec3 v_surfaceToLight; //point lighting
+	varying vec4 v_color;  
   
 	void main() {
 
-	  vec4 worldPosition = u_world * a_position; //In obj
-	  gl_Position = u_projection * u_view * worldPosition; //In obj
-	  v_surfaceToView = u_viewWorldPosition - worldPosition.xyz; //In obj
-	  v_texcoord = a_texcoord; //In obj
-	  v_normal = mat3(u_world) * a_normal;  //In obj
+	  vec4 worldPosition = u_world * a_position; 
+	  gl_Position = u_projection * u_view * worldPosition; 
+	  v_texcoord = a_texcoord; 
+	  v_normal = mat3(u_worldInverseTranspose) * a_normal;  
 	  // compute the world position of the surface
-	  vec3 surfaceWorldPosition = (u_world * a_position).xyz;
-	  v_surfaceToLight = v_surfaceToView - surfaceWorldPosition;
-	  v_color = a_color; 		//In obj
+	  vec3 surfaceWorldPosition = (u_world * a_position).xyz; //point lighting
+	  v_surfaceToLight = u_lightWorldPosition - surfaceWorldPosition; //point lighting 
+	  v_surfaceToView = u_viewWorldPosition - surfaceWorldPosition; //point lighting 
+	  v_color = a_color; 		
 	}
 	`;
 
 	const fs = `
 	precision highp float;
 
-	varying vec2 v_texcoord;		//In obj
-	varying vec3 v_normal;  			//In obj
-	varying vec3 v_surfaceToView; 		//In obj
-	varying vec4 v_color;				 //In obj
-	varying vec3 v_surfaceToLight;
+	varying vec2 v_texcoord;		
+	varying vec3 v_normal;  			
+	varying vec3 v_surfaceToView; 		
+	varying vec4 v_color;				 
+	varying vec3 v_surfaceToLight; //point lighting
 	
-	uniform vec3 diffuse;    			  //In obj	
-	uniform vec3 ambient;				  //In obj
-	uniform vec3 emissive;				  //In obj
-	uniform vec3 specular;				  //In obj
-	uniform vec3 u_lightDirection; 		  //In obj
-	uniform vec3 u_ambientLight;          //In obj
-	uniform vec3 u_reverseLightDirection; //In obj
+	uniform vec3 diffuse;    			  	
+	uniform vec3 ambient;				  
+	uniform vec3 emissive;				  
+	uniform vec3 specular;				  
+	uniform vec3 u_lightDirection; 		  
+	uniform vec3 u_ambientLight;          
+	uniform vec3 u_reverseLightDirection; 
 	uniform vec4 u_colorMult;
-	uniform vec4 u_diffuse;  				//In obj
+	uniform vec4 u_diffuse;  				
 
-	uniform sampler2D diffuseMap;	//In obj
+	uniform sampler2D diffuseMap;	
 	uniform sampler2D specularMap;
 	uniform sampler2D normalMap;
 
@@ -126,22 +126,22 @@
 	uniform float u_shadowIntensity;
 	
 	void main () {
-		vec3 normal = normalize(v_normal); //In obj
+		vec3 normal = normalize(v_normal); 
 		normal = texture2D(normalMap, v_texcoord).rgb * 2. - 1.;
 	
-		vec3 surfaceToViewDirection = normalize(v_surfaceToView);          		//In obj
 		vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
-		vec3 halfVector = normalize(u_lightDirection + surfaceToViewDirection);   //In obj
+		vec3 surfaceToViewDirection = normalize(v_surfaceToView);          		
+		vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);   
 				
 		// compute the light by taking the dot product of the normal to the light's reverse direction
-		float light = dot(v_normal, u_reverseLightDirection);                     //In obj
-		float specularLight = clamp(dot(normal, halfVector), 0.0, 1.0);  				//In obj
+		float light = dot(v_normal, surfaceToLightDirection);                     
+		float specularLight = dot(normal, halfVector);  				
 		vec4 specularMapColor = texture2D(specularMap, v_texcoord);
 		vec3 effectiveSpecular = specular * specularMapColor.rgb;
 	
-		vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);				//In obj
-		vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;   //In obj
-		float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;   	//In obj
+		vec4 diffuseMapColor = texture2D(diffuseMap, v_texcoord);				
+		vec3 effectiveDiffuse = diffuse * diffuseMapColor.rgb * v_color.rgb;   
+		float effectiveOpacity = opacity * diffuseMapColor.a * v_color.a;   	
 
 		gl_FragColor = vec4(
 			emissive +
@@ -153,8 +153,8 @@
 	`;
 </script>
 
-<script src="./src2/lib/profLibs/m4.js"></script>
-<script src="./src2/lib/profLibs/webgl-utils.js"></script>
-<script src="./src2/lib/JoyStick.js"></script>
-<script type="module" src="./src2/3D_Soccer.js"></script>
+<script src="./src/lib/profLibs/m4.js"></script>
+<script src="./src/lib/profLibs/webgl-utils.js"></script>
+<script src="./src/lib/JoyStick.js"></script>
+<script type="module" src="./src/3D_Soccer.js"></script>
 </html>

@@ -198,9 +198,9 @@ export class Camera {
 
 		return {
 			//u_lightDirection: m4.normalize([this.lightPosition.x, this.lightPosition.y, this.lightPosition.z]),
-			u_lightPosition: [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],
+			u_lightWorldPosition: [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],
 			u_lightDirection: m4.normalize([-1,3,5]),
-			u_reverseLightDirection: lightWorldMatrix.slice(8, 11),
+			u_reverseLightDirection: m4.normalize(lightWorldMatrix.slice(8, 11)),
 			u_lightIntensity: this.lightIntensity,
 			u_view: view,
 			u_projection: projection,

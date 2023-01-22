@@ -155,6 +155,8 @@ export class ObjectClass {
 					u_world = m4.zRotate(u_world, this.rotation.z);
 				}
 			}
+
+
 			for (const { bufferInfo, material } of this.parts) {
 
 				// calls gl.bindBuffer, gl.enableVertexAttribArray, gl.vertexAttribPointer
@@ -162,7 +164,7 @@ export class ObjectClass {
 
 				// calls gl.uniform
 				webglUtils.setUniforms(meshProgramInfo, {
-					u_world,
+					u_world, u_worldInverseTranspose: m4.transpose(m4.inverse(u_world)),
 				}, material);
 
 				// calls gl.drawArrays or gl.drawElements
