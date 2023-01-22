@@ -281,19 +281,11 @@ export class CameraAndLights {
 				};
 				camera.movement.dragging = true;
 			});
-			
-			/**
-			 * On mouse up, set dragging to false and update camera position
-			 */
-
+		
 			canvas.addEventListener("touchend", function (event) {
 				camera.moveCamera();
 				camera.movement.dragging = false;
 			});
-
-			/**
-			 * On mouse move, update camera position angle if dragging
-			*/
 
 			canvas.addEventListener("touchmove", function (event) {
 				if (!camera.movement.dragging) return;

@@ -138,8 +138,7 @@ export class ObjectClass {
 			let u_world = m4.identity();
 			
 			// Handle object translation
-			//if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != this.oldPosition.z) {
-				if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
+			if (this.position.x != this.oldPosition.x || this.position.y != this.oldPosition.y || this.position.z != 0) {
 				this.oldPosition = this.position;
 				u_world = m4.translate(u_world, this.position.x, this.position.y, this.position.z);
 			}
