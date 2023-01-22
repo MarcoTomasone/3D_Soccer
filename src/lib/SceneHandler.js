@@ -1,6 +1,6 @@
 
 import { Ball } from "./Ball.js";
-import { Camera } from "./CameraAndLights.js";
+import { CameraAndLights } from "./CameraAndLights.js";
 import { Refree } from "./Refree.js";
 export class SceneHandler {
 	
@@ -19,7 +19,7 @@ export class SceneHandler {
 		}
 		//Create a 2d context for the upper canvas and setting the menu for it
 		this.ctx = document.getElementById("upperCanvas").getContext("2d");
-		this.set2DMenu(0);
+		this.set2DMenu();
 		
 		//Compiles and links the shaders, looks up attribute and uniform locations
 		this.programInfo = webglUtils.createProgramInfo(this.gl, [vs, fs]);
@@ -27,14 +27,14 @@ export class SceneHandler {
 		this.objList = [];
 		this.objPositionList = objPositionList;
 		//Set up the camera and the ball 
-		this.camera = new Camera(this.gl.canvas);
+		this.camera = new CameraAndLights(this.gl.canvas);
 		this.ball = new Ball(this.gl.canvas, this.objPositionList, this.removeObject.bind(this));
 		this.refree = null;
 		this.timerStarted = false;
 		this.startTime = null;
 
 		//Setting up controls for the camera and the ball
-		Camera.setCameraControls(this.gl.canvas, this.camera);
+		CameraAndLights.setCameraControls(this.gl.canvas, this.camera);
 		Ball.setBallControls(this.gl.canvas, this.ball)
 		
 		//Camera radio buttons event listeners
@@ -65,7 +65,7 @@ export class SceneHandler {
 		}
 	}*/
 
-	async set2DMenu(numCardsGathered) {
+	async set2DMenu() {
 		this.ctx.canvas.width = this.gl.canvas.width * 20 / 100;
 		this.ctx.canvas.height = this.gl.canvas.height /2;
 		this.ctx.font = "30px Arial";
@@ -90,7 +90,7 @@ export class SceneHandler {
 		}
 	}
 
-	async setEndGame2DMenu(time) {
+	async setEndGame2DMenu() {
 		this.ctx.canvas.width = this.gl.canvas.width * 20 / 100;
 		this.ctx.canvas.height = this.gl.canvas.height /2;
 		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -206,7 +206,7 @@ export class SceneHandler {
 						this.refree.moveRefree(this.ball.getXPosition(), this.ball.getYPosition(), obj.visibility);
 						obj.position.x = this.refree.getXPosition();
 						obj.position.y = this.refree.getYPosition();
-						this.setEndGame2DMenu(time);
+						this.setEndGame2DMenu();
 					}
 				}	
 			}			

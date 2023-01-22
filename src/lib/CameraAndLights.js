@@ -1,4 +1,4 @@
-export class Camera {
+export class CameraAndLights {
 
 	constructor(canvas) {
 		this.target = {x: 0, y: 0, z: 0};
@@ -33,11 +33,6 @@ export class Camera {
 
 		this.lightPosition = {x: 0, y: 100, z: 350};
 		this.lightTarget = {x: 0, y: 0, z: 0};
-		this.width_projLight= 3000;
-		this.height_projLight= 1200;
-		this.fovLight = 12;
-		this.lightIntensity= 2.5;
-		this.shadowIntensity=0.9;
 		
 		//Set the listeners for the camera
 		document.getElementById("zoomCamera").addEventListener("input", function (event) {
@@ -197,11 +192,9 @@ export class Camera {
 		const projection = m4.perspective(this.fovRad, this.aspect, this.near, this.far);
 
 		return {
-			//u_lightDirection: m4.normalize([this.lightPosition.x, this.lightPosition.y, this.lightPosition.z]),
 			u_lightWorldPosition: [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],
 			u_lightDirection: m4.normalize([-1,3,5]),
 			u_reverseLightDirection: m4.normalize(lightWorldMatrix.slice(8, 11)),
-			u_lightIntensity: this.lightIntensity,
 			u_view: view,
 			u_projection: projection,
 			u_viewWorldPosition: [this.position.x, this.position.y, this.position.z],
