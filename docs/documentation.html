@@ -86,6 +86,16 @@ La più importante funzione che governa i comportamenti della palla è la collis
 <p>
 La classe Refree si occupa di gestire i movimenti dell'arbitro. L'arbitro apparirà solo dopo che l'utente con la palla ha raccolto tutti e tre i cartellini gialli posizionati all'interno del percorso con i cinesini. Al momento dello spawn dell'arbitro la sua posizione sarà fissata rispetto a quella attuale della palla. Da quel momento l'arbitro seguirà i movimenti della palla cercando di avvicinarsi ad essa e colpirla, ponendo fine al gioco. Questo è reso possibile aggiornando la posizione dell'arbitro in base alla posizione attuale della palla. L'arbitro è rappresentato da un cubo sul quale è applicata la texture della faccia dell'autore del progetto tramite gli algoritmi di UV mapping di Blender. 
 </p>
+<h3>Event Handlers</h3>
+<p> 
+    Per la gestione di tutti gli input da utente, le varie classi sono dotate di event handler diversi opportunamente implementati sia per desktop che per mobile. 
+    Il più evidente input da utente è il movimento della palla. Per questa è stato previsto un input da tastiera tramite WASD oppure, come già detto, un joystick.
+    Per la gestione della camera invece viene utilizzato da desktop il mouse e da mobile il touch. Lo stesso avviene per il ricaricamento del gioco al suo termine si prevede un listener "onClick" che permette di gestire sia il click da mouse che il touch da mobile.
+    I vari comandi nel command panel a destra sono invece dei classici elementi di form Html che verranno 
+    gestiti tramite degli eventi on click. 
+</p>
+<h3>Trasparenza</h3>
+Come feature aggiuntiva è stata implementata la trasparenza. Questa è presente nelle ringhiere degli spalti e su un oggetto per dare l'effetto vetro davanti la curva. Questa viene abilitata o disabilitata nel metodo render dello SceneHandler a seconda del valore dello slider che la controlla.
 </body>
 
 </html>
