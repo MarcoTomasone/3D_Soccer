@@ -99,7 +99,7 @@ export class SceneHandler {
 		wrapText(this.ctx, "RUN AWAY FROM THE REFREE!", 20, 70, this.ctx.canvas.width, 30);
 		if(this.timerStarted){
 			var timeElapsed = new Date().getTime() - this.startTime;
-			var seconds = 60 - Math.floor(timeElapsed / 1000);
+			var seconds = 10 - Math.floor(timeElapsed / 1000);
 			if(seconds > 0){
 				this.ctx.font = "60px Arial";
 				this.ctx.fillText( seconds, 100, 200);

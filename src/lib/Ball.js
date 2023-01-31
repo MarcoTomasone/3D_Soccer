@@ -28,7 +28,7 @@ export class Ball {
     moveBall(){
         //Speed in ball space
         var ballSpeed = {x : 0, y : 0, z : 0}; //x, y, z
-        //From speed world frame to speed car frame
+        //From speed world frame to speed ball frame
         var cosf = Math.cos(Math.PI/180.0);
         var sinf = Math.sin(Math.PI/180.0);
         ballSpeed.x = +cosf*this.speed.x - sinf*this.speed.y;
