@@ -99,7 +99,7 @@ export class SceneHandler {
 		wrapText(this.ctx, "RUN AWAY FROM THE REFREE!", 20, 70, this.ctx.canvas.width, 30);
 		if(this.timerStarted){
 			var timeElapsed = new Date().getTime() - this.startTime;
-			var seconds = 10 - Math.floor(timeElapsed / 1000);
+			var seconds = 60 - Math.floor(timeElapsed / 1000);
 			if(seconds > 0){
 				this.ctx.font = "60px Arial";
 				this.ctx.fillText( seconds, 100, 200);
@@ -154,8 +154,8 @@ export class SceneHandler {
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 		this.gl.enable(this.gl.DEPTH_TEST);
 		if(!document.querySelector("#transparencyCheckbox").checked)
-				this.gl.disable(this.gl.BLEND);
-		else
+			this.gl.disable(this.gl.BLEND);
+		else 
 			this.gl.enable(this.gl.BLEND);
 		this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
 		
@@ -169,7 +169,6 @@ export class SceneHandler {
 				obj.position.y = this.ball.getYPosition();
 				obj.rotation.x = this.ball.getXRotation();
 				obj.rotation.y = this.ball.getYRotation();
-				//obj.rotation.z = this.ball.getZRotation();
 				
 				
 				if(this.cameraOnBall){

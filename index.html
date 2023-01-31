@@ -28,11 +28,11 @@
 				<label for="camera1">Camera on Ball</label>
 			</div>
 			<div>
-			<Wdiv>
+			<div>
 				<input type="range" id="zoomCamera" name="zoomCamera" min="5" max="100" value="70">
 				<label for="zoomCameraLabel">Fov Camera</label>
 				<button id="defaultFovButton" name="defaultFov" type="button">Set Default Fov</button>
-			</Wdiv>
+			</div>
 			<div>
 				<button id="defaultAngleButton" name="defaultAngle" type="button">Set Default Camera Angle</button>
 				<button id="upCamera" name="upCamera" type="button" disabled>Up Camera</button>
@@ -128,11 +128,11 @@
 	void main () {
 		vec3 normal = normalize(v_normal); 
 		normal = texture2D(normalMap, v_texcoord).rgb * 2. - 1.;
-	
+		
 		vec3 surfaceToLightDirection = normalize(v_surfaceToLight);
 		vec3 surfaceToViewDirection = normalize(v_surfaceToView);          		
 		vec3 halfVector = normalize(surfaceToLightDirection + surfaceToViewDirection);   
-				
+		
 		// compute the light by taking the dot product of the normal to the light's reverse direction
 		float light = dot(v_normal, surfaceToLightDirection);                     
 		float specularLight = dot(normal, halfVector);  				

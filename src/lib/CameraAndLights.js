@@ -174,12 +174,6 @@ export class CameraAndLights {
 
 	getSharedUniforms = () => {
 		
-		const lightWorldMatrix = m4.lookAt(
-            [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],          			// position
-            [this.lightTarget.x, this.lightTarget.y, this.lightTarget.y], 	// target
-            [this.up.x, this.up.y, this.up.z]                               				// up
-        );
-
 		// Compute the camera's matrix using look at.
 		const camera = m4.lookAt(
 			[this.position.x, this.position.y, this.position.z], 
@@ -194,7 +188,6 @@ export class CameraAndLights {
 		return {
 			u_lightWorldPosition: [this.lightPosition.x, this.lightPosition.y, this.lightPosition.z],
 			u_lightDirection: m4.normalize([-1,3,5]),
-			u_reverseLightDirection: m4.normalize(lightWorldMatrix.slice(8, 11)),
 			u_view: view,
 			u_projection: projection,
 			u_viewWorldPosition: [this.position.x, this.position.y, this.position.z],

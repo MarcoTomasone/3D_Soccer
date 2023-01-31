@@ -32,9 +32,8 @@ export class Ball {
         var cosf = Math.cos(Math.PI/180.0);
         var sinf = Math.sin(Math.PI/180.0);
         ballSpeed.x = +cosf*this.speed.x - sinf*this.speed.y;
-        //ballSpeed.y = this.speed.y;
         ballSpeed.y = +sinf*this.speed.x + cosf*this.speed.y;
-        
+
         if(this.keyPressed.w ) {
             if( ballSpeed.x + this.maxAcceleration <= this.maxSpeed)
                 ballSpeed.x += this.maxAcceleration;
